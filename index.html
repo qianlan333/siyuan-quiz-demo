@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#ff7e5f">
+<title>小 IP 商业力测评</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif; }
+body { background: #fdf8f3; color: #2c2620; line-height: 1.6; min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
+.app { max-width: 600px; margin: 0 auto; padding: 24px 16px 40px; }
+.view { display: none; }
+.view.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* Welcome */
+.welcome { padding: 24px 8px; }
+.welcome h1 { font-size: 28px; margin-bottom: 8px; color: #1a1612; text-align: center; letter-spacing: -0.5px; }
+.welcome .subtitle { color: #8a7a6e; font-size: 14px; margin-bottom: 28px; text-align: center; }
+.welcome .desc { background: white; padding: 22px 24px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(184,144,116,0.08); }
+.welcome .desc h3 { font-size: 14px; color: #8a7a6e; margin-bottom: 14px; font-weight: 500; }
+.welcome .desc ul { list-style: none; }
+.welcome .desc li { padding: 7px 0; color: #2c2620; font-size: 15px; display: flex; align-items: center; }
+.welcome .desc li .dot { display: inline-block; width: 6px; height: 6px; background: #ff7e5f; border-radius: 50%; margin-right: 12px; flex-shrink: 0; }
+.welcome .hint { font-size: 13px; color: #8a7a6e; line-height: 1.6; padding: 0 4px; margin-bottom: 24px; }
+
+/* Buttons */
+.btn { display: block; width: 100%; padding: 15px 24px; background: #ff7e5f; color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; text-align: center; transition: transform 0.1s, opacity 0.15s, background 0.15s; font-family: inherit; }
+.btn:active { transform: scale(0.98); opacity: 0.92; }
+.btn:disabled { background: #e5dcd2; color: #b5a89a; cursor: not-allowed; }
+.btn:disabled:active { transform: none; }
+.btn-secondary { background: white; color: #6e5e51; border: 1.5px solid #e5dcd2; }
+.btn-secondary:active { background: #fdf8f3; }
+
+/* Quiz */
+.progress { margin-bottom: 20px; }
+.progress-info { display: flex; justify-content: space-between; font-size: 13px; color: #8a7a6e; margin-bottom: 8px; padding: 0 2px; }
+.progress-info .index { font-weight: 600; color: #ff7e5f; }
+.progress-bar-container { height: 5px; background: #ede4d8; border-radius: 3px; overflow: hidden; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, #ff7e5f, #feb47b); transition: width 0.3s ease; border-radius: 3px; }
+
+.question-card { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 2px 12px rgba(184,144,116,0.08); margin-bottom: 14px; }
+.dim-tag { display: inline-block; padding: 4px 12px; background: #fff0eb; color: #ff7e5f; font-size: 12px; border-radius: 12px; margin-bottom: 12px; font-weight: 500; }
+.question-text { font-size: 18px; font-weight: 600; color: #1a1612; line-height: 1.55; }
+
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option { background: white; padding: 16px 18px; border: 1.5px solid #ece2d6; border-radius: 12px; cursor: pointer; color: #2c2620; font-size: 15px; line-height: 1.5; text-align: left; transition: all 0.15s; user-select: none; }
+.option:active { transform: scale(0.99); }
+.option.selected { border-color: #ff7e5f; background: #fff5f0; box-shadow: 0 0 0 3px rgba(255,126,95,0.1); }
+
+.quiz-nav { display: flex; gap: 12px; margin-top: 24px; }
+.quiz-nav .btn-secondary { width: 110px; flex-shrink: 0; }
+.quiz-nav .btn:not(.btn-secondary) { flex: 1; }
+
+/* Result */
+.overview { background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); color: white; padding: 32px 24px; border-radius: 20px; margin-bottom: 16px; text-align: center; box-shadow: 0 8px 24px rgba(255,126,95,0.25); }
+.overview .label { font-size: 13px; opacity: 0.85; margin-bottom: 4px; }
+.overview .total-score { font-size: 64px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+.overview .total-score-suffix { font-size: 18px; opacity: 0.85; margin-left: 4px; font-weight: 500; }
+.overview .level { display: inline-block; padding: 5px 16px; background: rgba(255,255,255,0.22); border-radius: 14px; font-size: 13px; margin: 14px 0 16px; backdrop-filter: blur(4px); font-weight: 500; }
+.overview .tagline { font-size: 14px; line-height: 1.65; opacity: 0.95; padding: 0 8px; }
+
+.strength-weakness { background: white; padding: 18px 22px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(184,144,116,0.08); }
+.sw-block { padding: 6px 0; }
+.sw-block + .sw-block { border-top: 1px solid #f5ede2; margin-top: 10px; padding-top: 14px; }
+.sw-block h4 { font-size: 13px; color: #8a7a6e; margin-bottom: 8px; font-weight: 500; }
+.sw-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; color: #2c2620; font-size: 15px; }
+.sw-item .name { font-weight: 500; }
+.sw-item .score { color: #ff7e5f; font-weight: 600; font-size: 16px; }
+.sw-item.weakness .score { color: #d97c5f; }
+.sw-empty { font-size: 13px; color: #8a7a6e; padding: 6px 0; }
+
+.section-title { font-size: 18px; font-weight: 700; color: #1a1612; margin: 28px 0 14px; padding-left: 4px; letter-spacing: -0.3px; }
+
+.dim-card { background: white; padding: 20px 22px; border-radius: 16px; margin-bottom: 12px; box-shadow: 0 2px 12px rgba(184,144,116,0.08); border-left: 4px solid transparent; }
+.dim-card.weakness { border-left-color: #ff7e5f; }
+.dim-card .head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 12px; }
+.dim-card .name { font-size: 16px; font-weight: 600; color: #1a1612; }
+.dim-card .score-block { text-align: right; flex-shrink: 0; }
+.dim-card .score-num { font-size: 26px; font-weight: 700; color: #ff7e5f; line-height: 1; }
+.dim-card .level-text { font-size: 12px; color: #8a7a6e; margin-left: 4px; }
+.dim-card .type-tag { display: inline-block; padding: 4px 12px; background: #fff5f0; color: #ff7e5f; font-size: 13px; border-radius: 10px; margin-bottom: 14px; font-weight: 600; }
+.dim-card .info-block { margin-bottom: 8px; font-size: 14px; line-height: 1.6; color: #4a3f36; padding-left: 2px; }
+.dim-card .info-block:last-child { margin-bottom: 0; }
+.dim-card .info-block .label { display: inline-block; color: #8a7a6e; font-size: 12px; margin-right: 4px; min-width: 32px; }
+
+.cta-card { background: white; padding: 16px 20px; border-radius: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 12px rgba(184,144,116,0.08); cursor: pointer; transition: transform 0.1s; }
+.cta-card:active { transform: scale(0.99); }
+.cta-card .title { font-size: 15px; color: #1a1612; font-weight: 500; }
+.cta-card .arrow { color: #ff7e5f; font-size: 20px; font-weight: 300; }
+
+.footer-actions { margin-top: 32px; padding-bottom: 16px; }
+.demo-tip { font-size: 12px; color: #b5a89a; text-align: center; margin-top: 16px; padding: 0 12px; line-height: 1.6; }
+
+@media (max-width: 380px) {
+  .welcome h1 { font-size: 24px; }
+  .question-text { font-size: 17px; }
+  .overview .total-score { font-size: 54px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section id="view-welcome" class="view active">
+  <div class="welcome">
+    <h1>小 IP 商业力测评</h1>
+    <p class="subtitle">5 维度 · 25 题 · 5-7 分钟</p>
+    <div class="desc">
+      <h3>你将测评的 5 个维度</h3>
+      <ul>
+        <li><span class="dot"></span>用户获取（流量引入能力）</li>
+        <li><span class="dot"></span>用户维护（关系升温能力）</li>
+        <li><span class="dot"></span>用户成交（临门一脚能力）</li>
+        <li><span class="dot"></span>用户交付（预期管理能力）</li>
+        <li><span class="dot"></span>用户裂变 / 升单（价值挖掘能力）</li>
+      </ul>
+    </div>
+    <p class="hint">每题选择最贴近你真实状态的一项，没有"标准答案"，凭直觉作答即可。</p>
+    <button class="btn" onclick="startQuiz()">开始测评 →</button>
+  </div>
+</section>
+
+<section id="view-quiz" class="view">
+  <div class="progress">
+    <div class="progress-info">
+      <span><span class="index" id="progress-num">1</span> / 25 题</span>
+      <span id="progress-percent">4%</span>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar" style="width: 4%"></div>
+    </div>
+  </div>
+  <div class="question-card">
+    <span class="dim-tag" id="q-dim"></span>
+    <p class="question-text" id="q-text"></p>
+  </div>
+  <div class="options" id="q-options"></div>
+  <div class="quiz-nav">
+    <button class="btn btn-secondary" id="prev-btn" onclick="prevQuestion()">上一题</button>
+    <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+  </div>
+</section>
+
+<section id="view-result" class="view">
+  <div class="overview">
+    <div class="label">商业力综合分</div>
+    <div>
+      <span class="total-score" id="r-total">0</span>
+      <span class="total-score-suffix">/ 100</span>
+    </div>
+    <div class="level" id="r-level"></div>
+    <p class="tagline" id="r-tagline"></p>
+  </div>
+
+  <div class="strength-weakness">
+    <div class="sw-block">
+      <h4>★ 优势项</h4>
+      <div id="r-strengths"></div>
+    </div>
+    <div class="sw-block">
+      <h4>⚠ 劣势项</h4>
+      <div id="r-weaknesses"></div>
+    </div>
+  </div>
+
+  <h2 class="section-title">5 维详细分析</h2>
+  <div id="r-dimensions"></div>
+
+  <h2 class="section-title">推荐动作</h2>
+  <div id="r-ctas"></div>
+
+  <div class="footer-actions">
+    <button class="btn btn-secondary" onclick="restart()">重新测评</button>
+    <p class="demo-tip">这是一个体感 demo，结果不会被保存</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+// ============ Data ============
+
+const QUESTIONS = [
+  // 维度一：用户获取
+  { dim: '用户获取', text: '你想给自己加 100 个新精准粉，第一反应是？', options: [
+    { type: '佛系型', score: 1, text: '朋友圈吼一嗓子"求介绍"，等天上掉馅饼' },
+    { type: '莽撞型', score: 2, text: '进十几个群拉人，能加多少加多少，先有量再说' },
+    { type: '钩子型', score: 3, text: '设计个钩子（资料包 / 体验课 / 红包），定向丢到目标群里钓鱼' },
+    { type: '磁铁型', score: 4, text: '写一篇戳痛点的内容发到小红书 / 视频号，等他们主动来加' }
+  ]},
+  { dim: '用户获取', text: '你目前主要的引流方式是？', options: [
+    { type: '佛系型', score: 1, text: '老客户介绍 / 朋友帮忙拉，听天由命' },
+    { type: '莽撞型', score: 2, text: '不停加人 / 进群拉人，量大概率高' },
+    { type: '钩子型', score: 3, text: '几个固定的钩子和引流活动' },
+    { type: '磁铁型', score: 4, text: '内容矩阵（账号 + 人设 + 持续输出），让人主动来' }
+  ]},
+  { dim: '用户获取', text: '你的引流"钩子"长什么样？', options: [
+    { type: '佛系型', score: 1, text: '我没有什么固定钩子，临时想啥发啥' },
+    { type: '莽撞型', score: 2, text: '"进群送资料""加我送 XXX"这类无差别钩子' },
+    { type: '钩子型', score: 3, text: '针对特定问题的解决方案（如"3 天搞定 X 的资料包"）' },
+    { type: '磁铁型', score: 4, text: '通过持续的内容 / 人设吸引，用户因为认同你而来' }
+  ]},
+  { dim: '用户获取', text: '看到同行 IP 涨粉很快，你的反应通常是？', options: [
+    { type: '佛系型', score: 1, text: '羡慕一下，觉得人家命好 / 有资源' },
+    { type: '莽撞型', score: 2, text: '立刻去他的评论区 / 粉丝群里加人' },
+    { type: '钩子型', score: 3, text: '拆解他的钩子是什么，照着设计一个' },
+    { type: '磁铁型', score: 4, text: '研究他的人设和定位，思考自己的差异化打法' }
+  ]},
+  { dim: '用户获取', text: '如果有 1000 块预算专门用来涨粉，你会怎么花？', options: [
+    { type: '佛系型', score: 1, text: '不舍得花，宁可自然涨' },
+    { type: '莽撞型', score: 2, text: '全部砸到投流上，能换多少粉算多少' },
+    { type: '钩子型', score: 3, text: '设计一个引流活动，钱花在钩子物料和投放上' },
+    { type: '磁铁型', score: 4, text: '投在内容创作上（拍视频 / 请剪辑 / 打磨账号）' }
+  ]},
+
+  // 维度二：用户维护
+  { dim: '用户维护', text: '一个新朋友刚加你微信、备注好了，你下一步会做什么？', options: [
+    { type: '僵尸粉型', score: 1, text: '先放着，等他自己来找我说话' },
+    { type: '心急型', score: 2, text: '立刻甩一份产品介绍 / 价目表过去，怕错过机会' },
+    { type: '暖男/女型', score: 3, text: '简单聊几句，问问他做什么的、怎么找到我的' },
+    { type: '养鱼型', score: 4, text: '有破冰节奏：自我介绍 + 给小礼物 + 让他做选择题' }
+  ]},
+  { dim: '用户维护', text: '翻一下你最近一周的朋友圈，主要内容是？', options: [
+    { type: '僵尸粉型', score: 1, text: '有空才发，没空就好几天空着' },
+    { type: '心急型', score: 2, text: '几乎全是产品广告 / 带货链接' },
+    { type: '暖男/女型', score: 3, text: '一半生活一半干货，偶尔卖一下产品' },
+    { type: '养鱼型', score: 4, text: '每条都有定位（人设 / 价值 / 案例 / 卖货），按节奏发' }
+  ]},
+  { dim: '用户维护', text: '让你立刻说出"你最赚钱的 10 个客户都是谁、有什么共同点"，反应是？', options: [
+    { type: '僵尸粉型', score: 1, text: '啊？我没想过这个问题' },
+    { type: '心急型', score: 2, text: '大概有印象，但说不出共同点' },
+    { type: '暖男/女型', score: 3, text: '能说出名字，凭印象大概知道他们的特征' },
+    { type: '养鱼型', score: 4, text: '立刻打开表格 / 笔记，说清楚他们是谁、为什么找我、贡献了多少' }
+  ]},
+  { dim: '用户维护', text: '你上一次主动联系老用户（不是为了卖东西）是什么时候？', options: [
+    { type: '僵尸粉型', score: 1, text: '想不起来了，应该挺久了' },
+    { type: '心急型', score: 2, text: '上次卖东西的时候顺便聊了两句' },
+    { type: '暖男/女型', score: 3, text: '节日发过群祝福' },
+    { type: '养鱼型', score: 4, text: '这周内联系过，给他发了对他有用的内容 / 资料' }
+  ]},
+  { dim: '用户维护', text: '用户和你的日常互动是？', options: [
+    { type: '僵尸粉型', score: 1, text: '加了就加了，几乎零互动' },
+    { type: '心急型', score: 2, text: '偶尔点赞我的促销动态' },
+    { type: '暖男/女型', score: 3, text: '经常点赞评论，关系还不错' },
+    { type: '养鱼型', score: 4, text: '主动期待我的更新，会私信问问题 / 咨询 / 下单都很自然' }
+  ]},
+
+  // 维度三：用户成交
+  { dim: '用户成交', text: '用户问完产品细节后说"我再考虑一下"，你的第一反应是？', options: [
+    { type: '被动型', score: 1, text: '"嗯好的，您慢慢考虑" —— 然后这单基本凉了' },
+    { type: '压迫型', score: 2, text: '立刻发"今天最后一天优惠！" 反复催，哪怕昨天也这么说过' },
+    { type: '推销型', score: 3, text: '再次强调产品好处和性价比，希望他想通' },
+    { type: '催眠型', score: 4, text: '反问："您主要在纠结哪一点？" 先了解顾虑再回应' }
+  ]},
+  { dim: '用户成交', text: '卖一个 999 元的产品，你的成交话术大概是？', options: [
+    { type: '被动型', score: 1, text: '没什么固定话术，对方问什么答什么' },
+    { type: '压迫型', score: 2, text: '反复发"限时优惠""错过没了""倒计时"催单话术' },
+    { type: '推销型', score: 3, text: '一段固定话术：产品有 ABC 三大好处，性价比超高' },
+    { type: '催眠型', score: 4, text: '用案例和故事让用户自己看到需求，自我说服' }
+  ]},
+  { dim: '用户成交', text: '用户犹豫"有点贵"时，你最常用的应对是？', options: [
+    { type: '被动型', score: 1, text: '"那行吧，您再考虑"，不强求' },
+    { type: '压迫型', score: 2, text: '"今天真的最后一天，明天就恢复原价！"' },
+    { type: '推销型', score: 3, text: '帮他算账："分摊到每天才几块钱，比一杯咖啡便宜"' },
+    { type: '催眠型', score: 4, text: '先共情："我理解，是预算紧张，还是觉得现在不是时候？我们聊聊看"' }
+  ]},
+  { dim: '用户成交', text: '当你成交了一单，你最常做的复盘是？', options: [
+    { type: '被动型', score: 1, text: '几乎不复盘，单子结了就忘' },
+    { type: '压迫型', score: 2, text: '主要看有没有给对方"足够的紧迫感"' },
+    { type: '推销型', score: 3, text: '看哪个产品卖点 / 价格最打动他' },
+    { type: '催眠型', score: 4, text: '拆解他的购买动机：他在解决什么问题？哪一步几乎让他离开？' }
+  ]},
+  { dim: '用户成交', text: '你最相信下面哪句话？', options: [
+    { type: '被动型', score: 1, text: '"强扭的瓜不甜，缘分到了自然就成了"' },
+    { type: '压迫型', score: 2, text: '"不优惠不催就成不了交，用户都是被推一把才动的"' },
+    { type: '推销型', score: 3, text: '"把好处讲清楚、把价值讲透，用户就会买"' },
+    { type: '催眠型', score: 4, text: '"用户买的不是产品，是产品帮他解决的那个问题"' }
+  ]},
+
+  // 维度四：用户交付
+  { dim: '用户交付', text: '用户付款的那一刻，你给他发的第一条消息通常是？', options: [
+    { type: '放羊型', score: 1, text: '没发，等他自己来问下一步怎么办' },
+    { type: '割韭菜型', score: 2, text: '"感谢支持！" —— 然后就消失了' },
+    { type: '打工型', score: 3, text: '"感谢您的购买，稍后我们会安排服务" 这种标准话术' },
+    { type: '惊喜型', score: 4, text: '完整的欢迎仪式：感谢 + 下一步明细 + 一个小惊喜（资料 / 红包 / 专属群邀请）' }
+  ]},
+  { dim: '用户交付', text: '服务开始前，你会怎么让用户清楚"会得到什么"？', options: [
+    { type: '放羊型', score: 1, text: '不会刻意对齐，做到哪算哪' },
+    { type: '割韭菜型', score: 2, text: '简单说一句"我们包含 ABC 三块"' },
+    { type: '打工型', score: 3, text: '给他发一份服务清单 / 流程图' },
+    { type: '惊喜型', score: 4, text: '一对一确认：交付时间、阶段成果、什么是不包含的，避免后期落差' }
+  ]},
+  { dim: '用户交付', text: '服务过程中用户突然说"我感觉效果没达到预期"，你怎么处理？', options: [
+    { type: '放羊型', score: 1, text: '心里"我也很无奈，能做的都做了"，让他自己消化' },
+    { type: '割韭菜型', score: 2, text: '简单解释一下，能搪塞过去就好' },
+    { type: '打工型', score: 3, text: '认真听他反馈，调整服务内容' },
+    { type: '惊喜型', score: 4, text: '先认错共情 → 拆解他的预期是什么、哪里有 gap → 给个补救方案' }
+  ]},
+  { dim: '用户交付', text: '服务结束后的最后一次互动，通常是？', options: [
+    { type: '放羊型', score: 1, text: '服务一结束就各回各家了' },
+    { type: '割韭菜型', score: 2, text: '简单一句"感谢支持，再见！"' },
+    { type: '打工型', score: 3, text: '发个反馈问卷请他填' },
+    { type: '惊喜型', score: 4, text: '有结案仪式：总结他的成长 / 数据 + 纪念物 + 顺势铺垫下一阶段合作' }
+  ]},
+  { dim: '用户交付', text: '用户反馈中，最让你紧张的是哪句话？', options: [
+    { type: '放羊型', score: 1, text: '"你怎么从来不主动联系我"' },
+    { type: '割韭菜型', score: 2, text: '"你收钱前后态度不一样"' },
+    { type: '打工型', score: 3, text: '"你做的事情没毛病，但也没什么记忆点"' },
+    { type: '惊喜型', score: 4, text: '我很少收到负面反馈，更多是"你比我预期的还要用心"' }
+  ]},
+
+  // 维度五：用户裂变 / 升单
+  { dim: '用户裂变', text: '老用户买完一次后，你的设计里他下一步会做什么？', options: [
+    { type: '一锤子型', score: 1, text: '没设计，看他自己' },
+    { type: '随缘型', score: 2, text: '期待他自己再来买，不然就算了' },
+    { type: '利诱型', score: 3, text: '我会发优惠券 / 回访求他再来' },
+    { type: '共生型', score: 4, text: '有清晰的产品阶梯，他买完入门款会自然想买进阶款' }
+  ]},
+  { dim: '用户裂变', text: '你对老用户会有专门的优惠方案吗？', options: [
+    { type: '一锤子型', score: 1, text: '买了就是买了，不分新老' },
+    { type: '随缘型', score: 2, text: '看关系，关系好的就便宜点，其他人原价' },
+    { type: '利诱型', score: 3, text: '偶尔做一些折扣活动看心情 / 用返现做转介绍' },
+    { type: '共生型', score: 4, text: '有明确的新老客价格体系和增值方案，老用户感觉"被偏爱"' }
+  ]},
+  { dim: '用户裂变', text: '上个月有几个老用户主动给你介绍了新客户？', options: [
+    { type: '一锤子型', score: 1, text: '一个都没有' },
+    { type: '随缘型', score: 2, text: '1-2 个，凭朋友帮忙' },
+    { type: '利诱型', score: 3, text: '5 个左右，因为我发了红包 / 礼品' },
+    { type: '共生型', score: 4, text: '10 个以上，老用户主动安利，因为他们觉得我有价值' }
+  ]},
+  { dim: '用户裂变', text: '你的产品阶梯 / 客单价分布是？', options: [
+    { type: '一锤子型', score: 1, text: '只有一个产品 / 客单价，没有阶梯' },
+    { type: '随缘型', score: 2, text: '有几个产品但没明确升单逻辑' },
+    { type: '利诱型', score: 3, text: '有阶梯，但靠优惠券 / 折扣推进升单' },
+    { type: '共生型', score: 4, text: '完整的产品阶梯，老客户自然进阶到高客单（甚至成为合作伙伴）' }
+  ]},
+  { dim: '用户裂变', text: '你对老用户的看法，更接近哪种？', options: [
+    { type: '一锤子型', score: 1, text: '老客户太磨人，不如开发新客省事' },
+    { type: '随缘型', score: 2, text: '老客户重要，但实在没时间专门维护' },
+    { type: '利诱型', score: 3, text: '老客户很重要，会做一些专属动作或返现激励' },
+    { type: '共生型', score: 4, text: '老客户是核心资产，所有业务都在想"怎么让老客户买更多、带更多"' }
+  ]}
+];
+
+const DIM_CONFIG = {
+  '用户获取':   { full: '用户获取（流量引入能力）',     priority: ['磁铁型', '钩子型', '莽撞型', '佛系型'],         cta: '流量诊断 + 钩子设计轻咨询' },
+  '用户维护':   { full: '用户维护（关系升温能力）',     priority: ['养鱼型', '暖男/女型', '心急型', '僵尸粉型'],    cta: '朋友圈剧本 / 私域 SOP 工具包' },
+  '用户成交':   { full: '用户成交（临门一脚能力）',     priority: ['催眠型', '推销型', '压迫型', '被动型'],         cta: '成交话术 SOP + 案例库' },
+  '用户交付':   { full: '用户交付（预期管理能力）',     priority: ['惊喜型', '打工型', '割韭菜型', '放羊型'],       cta: '交付仪式 + 超预期设计模板' },
+  '用户裂变':   { full: '用户裂变 / 升单（价值挖掘）',  priority: ['共生型', '利诱型', '随缘型', '一锤子型'],       cta: '老客户运营 + 产品阶梯设计' }
+};
+
+const TYPE_INFO = {
+  // 用户获取
+  '佛系型': { feature: '你不主动出击，依赖朋友介绍和自然流量', strength: '人脉口碑沉淀强，用户来了信任度高', risk: '流量天花板低、增长不可控、抗风险弱', advice: '先选 1 个内容平台（小红书 / 视频号）开始持续输出，把"等"换成"播种"' },
+  '莽撞型': { feature: '靠"加得多"拼概率，不挑人不挑场景', strength: '执行力强，敢于大量铺撒', risk: '精准度低、流量来了留不住、容易被封号', advice: '把"加多少人"换成"加哪种人"，先定义你的目标用户长什么样' },
+  '钩子型': { feature: '会设计诱饵，能精准捞到对的人', strength: '路径清晰、可复制、ROI 可算', risk: '钩子单一容易疲劳、过于依赖某个钩子', advice: '做钩子矩阵 + 数据复盘，每月迭代 1 个新钩子' },
+  '磁铁型': { feature: '通过持续的内容和人设吸引用户主动来', strength: '可持续、有壁垒、信任度高', risk: '起势慢、ROI 不容易算清', advice: '复盘哪类内容带粉效率最高，把放大杠杆找出来' },
+
+  // 用户维护
+  '僵尸粉型': { feature: '用户加了就忘，几乎没有互动', strength: '用户对你也没期待，未来翻盘空间大', risk: '用户加了等于没加，转化率会极低', advice: '先建一个老用户标签 + 一套首次破冰话术，从 0 到 1 做起来' },
+  '心急型': { feature: '急于推销，加了就甩产品', strength: '目标明确、行动力强', risk: '被屏蔽 / 拉黑，用户对你警惕', advice: '把"卖"换成"先给价值"，破冰阶段只输出不收割' },
+  '暖男/女型': { feature: '偶尔关心、关系不错，但没系统', strength: '用户对你有好感、信任基础好', risk: '关系好但转化路径模糊，价值变不了现金', advice: '在关心节奏里加产品种草节点，让"暖"和"卖"自然衔接' },
+  '养鱼型': { feature: '持续输出、系统经营，用户主动期待你的动态', strength: '用户黏性强、复购率高', risk: '精力消耗大、难规模化', advice: '把维护动作 SOP 化，借助标签和工具提效' },
+
+  // 用户成交
+  '被动型': { feature: '不好意思谈钱，等用户主动开口', strength: '不让用户反感、信任感强', risk: '好客户白白溜走，转化率极低', advice: '学会主动报价 + 处理顾虑的话术，从"等"到"问"' },
+  '压迫型': { feature: '反复逼单、制造紧迫感', strength: '短期数据好看', risk: '用户买完不爽，差评 / 退款 / 不复购', advice: '把"催"换成"问"，先了解顾虑再回应' },
+  '推销型': { feature: '擅长讲产品好处和性价比', strength: '表达能力强、话术自然', risk: '容易陷入价格战、用户记得产品但记不住你', advice: '多用案例和故事代替卖点列表，让用户在场景中自我说服' },
+  '催眠型': { feature: '用案例和故事让用户自我说服', strength: '转化率高、用户认知主动、客单价能做高', risk: '话术依赖讲师能力、难复制给团队', advice: '把成交话术 SOP 化，沉淀成可复用的案例库' },
+
+  // 用户交付
+  '放羊型': { feature: '收钱后基本不管，用户问了才动', strength: '用户期望低，反而少抱怨', risk: '口碑差、复购率低，用户感觉被骗', advice: '做最小化交付清单，把"用户来问"换成"我主动同步"' },
+  '割韭菜型': { feature: '收钱前热情、收钱后冷淡', strength: '短期收入高', risk: '被骂"骗子"、差评连锁、品牌彻底坏掉', advice: '把交付预算补足，至少做到承诺的 80%' },
+  '打工型': { feature: '按部就班完成承诺，没差错也没惊喜', strength: '口碑稳定、不会出大问题', risk: '用户记不住你、被替代成本低', advice: '在 2-3 个交付节点加"惊喜动作"，让用户有记忆点' },
+  '惊喜型': { feature: '超预期交付，让用户感到"买对了"', strength: '口碑炸裂、复购高、转介绍多', risk: '精力消耗大、难规模化', advice: '把惊喜动作 SOP 化，借模板和工具批量复制' },
+
+  // 用户裂变
+  '一锤子型': { feature: '一次买卖，没后续', strength: '模式简单、不用维护', risk: '每单都是新成本、获客成本居高不下', advice: '先做 1 个老客户回访动作（如 30 天后回访），把流失先堵住' },
+  '随缘型': { feature: '偶尔有老客介绍，全凭心情', strength: '自然真实、用户不反感', risk: '没有规模、增长不可控', advice: '设计 1 个"老带新"激励，把"随缘"变成"有路径"' },
+  '利诱型': { feature: '用红包 / 礼品诱导转介绍', strength: '有数据可优化、动作可复制', risk: '用户为了利益而非价值推荐，介绍来的人质量差', advice: '把"利"包装成"专属感"（专属价 / 老客特权），从功利转情感' },
+  '共生型': { feature: '老客户主动安利、复购、甚至成为合作伙伴', strength: '指数增长、获客成本极低', risk: '高门槛、需要长期投入', advice: '持续投入老客户深度运营，让标杆客户成为你的"代言人"' }
+};
+
+// ============ State ============
+
+let currentIndex = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+let displayedOptions = new Array(QUESTIONS.length).fill(null);
+
+// ============ Logic ============
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function startQuiz() {
+  showView('quiz');
+  showQuestion(0);
+}
+
+function showQuestion(idx) {
+  currentIndex = idx;
+  const q = QUESTIONS[idx];
+  const total = QUESTIONS.length;
+
+  // Progress
+  const pct = Math.round((idx + 1) / total * 100);
+  document.getElementById('progress-num').textContent = idx + 1;
+  document.getElementById('progress-percent').textContent = pct + '%';
+  document.getElementById('progress-bar').style.width = pct + '%';
+
+  // Question
+  document.getElementById('q-dim').textContent = DIM_CONFIG[q.dim].full;
+  document.getElementById('q-text').textContent = q.text;
+
+  // Options - shuffle once per question
+  if (!displayedOptions[idx]) {
+    displayedOptions[idx] = shuffle([...q.options]);
+  }
+  const optsContainer = document.getElementById('q-options');
+  optsContainer.innerHTML = '';
+  displayedOptions[idx].forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[idx] === i ? ' selected' : '');
+    div.textContent = opt.text;
+    div.onclick = () => selectOption(idx, i);
+    optsContainer.appendChild(div);
+  });
+
+  // Nav buttons
+  document.getElementById('prev-btn').style.visibility = idx === 0 ? 'hidden' : 'visible';
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.textContent = idx === total - 1 ? '查看结果 →' : '下一题';
+  nextBtn.disabled = answers[idx] === null;
+}
+
+function selectOption(qIdx, optIdx) {
+  answers[qIdx] = optIdx;
+  // Update visual selection immediately
+  document.querySelectorAll('#q-options .option').forEach((o, i) => {
+    o.classList.toggle('selected', i === optIdx);
+  });
+  document.getElementById('next-btn').disabled = false;
+  // Auto-advance for non-last questions
+  if (qIdx < QUESTIONS.length - 1) {
+    setTimeout(() => {
+      if (currentIndex === qIdx) showQuestion(qIdx + 1);
+    }, 280);
+  }
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) showQuestion(currentIndex - 1);
+}
+
+function nextQuestion() {
+  if (currentIndex < QUESTIONS.length - 1) {
+    showQuestion(currentIndex + 1);
+  } else {
+    computeAndShowResults();
+  }
+}
+
+function computeAndShowResults() {
+  // Init dim aggregator
+  const dimNames = ['用户获取', '用户维护', '用户成交', '用户交付', '用户裂变'];
+  const dimResults = {};
+  dimNames.forEach(d => dimResults[d] = { rawScore: 0, typeCounts: {} });
+
+  // Tally
+  QUESTIONS.forEach((q, qi) => {
+    const optIdx = answers[qi];
+    const opt = displayedOptions[qi][optIdx];
+    dimResults[q.dim].rawScore += opt.score;
+    dimResults[q.dim].typeCounts[opt.type] = (dimResults[q.dim].typeCounts[opt.type] || 0) + 1;
+  });
+
+  // Compute dominant type per dim with tie-break
+  const dimsArray = dimNames.map(name => {
+    const data = dimResults[name];
+    const counts = data.typeCounts;
+    const maxCount = Math.max(...Object.values(counts));
+    const tied = Object.entries(counts).filter(([t, c]) => c === maxCount).map(([t]) => t);
+    const priority = DIM_CONFIG[name].priority;
+    const dominant = priority.find(t => tied.includes(t));
+    return {
+      name,
+      rawScore: data.rawScore,
+      displayScore: data.rawScore * 5,
+      level: getLevel(data.rawScore),
+      dominantType: dominant,
+      tieBreak: tied.length > 1
+    };
+  });
+
+  // Total
+  const totalScore = Math.round(dimsArray.reduce((s, d) => s + d.displayScore, 0) / 5);
+  const totalLevel = getLevelByDisplay(totalScore);
+  const tagline = getTagline(totalScore);
+
+  // Strengths and weaknesses (must hit thresholds)
+  const sortedDesc = [...dimsArray].sort((a, b) => b.displayScore - a.displayScore);
+  const sortedAsc  = [...dimsArray].sort((a, b) => a.displayScore - b.displayScore);
+  const strengths = sortedDesc.filter(d => d.displayScore >= 65).slice(0, 2);
+  const weaknesses = sortedAsc.filter(d => d.displayScore <= 60).slice(0, 2);
+
+  // ---- Render ----
+  document.getElementById('r-total').textContent = totalScore;
+  document.getElementById('r-level').textContent = totalLevel;
+  document.getElementById('r-tagline').textContent = tagline;
+
+  // Strengths
+  const strContainer = document.getElementById('r-strengths');
+  strContainer.innerHTML = strengths.length === 0
+    ? '<div class="sw-empty">暂无明显优势项，建议聚焦补短板</div>'
+    : strengths.map(d => `
+        <div class="sw-item">
+          <span class="name">${d.name}</span>
+          <span class="score">${d.displayScore} 分</span>
+        </div>`).join('');
+
+  // Weaknesses
+  const wkContainer = document.getElementById('r-weaknesses');
+  wkContainer.innerHTML = weaknesses.length === 0
+    ? '<div class="sw-empty">5 维均衡，建议聚焦放大优势</div>'
+    : weaknesses.map(d => `
+        <div class="sw-item weakness">
+          <span class="name">${d.name}</span>
+          <span class="score">${d.displayScore} 分</span>
+        </div>`).join('');
+
+  // Dim cards (weakness first)
+  const weaknessNames = new Set(weaknesses.map(d => d.name));
+  const sortedForDisplay = [...dimsArray].sort((a, b) => {
+    const aw = weaknessNames.has(a.name);
+    const bw = weaknessNames.has(b.name);
+    if (aw !== bw) return aw ? -1 : 1;
+    return a.displayScore - b.displayScore;
+  });
+  document.getElementById('r-dimensions').innerHTML = sortedForDisplay.map(d => {
+    const info = TYPE_INFO[d.dominantType];
+    const isWeak = weaknessNames.has(d.name);
+    return `
+      <div class="dim-card${isWeak ? ' weakness' : ''}">
+        <div class="head">
+          <span class="name">${d.name}</span>
+          <span class="score-block">
+            <span class="score-num">${d.displayScore}</span><span class="level-text">/100 · ${d.level}</span>
+          </span>
+        </div>
+        <span class="type-tag">你的型：${d.dominantType}</span>
+        <div class="info-block"><span class="label">特征</span>${info.feature}</div>
+        <div class="info-block"><span class="label">优势</span>${info.strength}</div>
+        <div class="info-block"><span class="label">风险</span>${info.risk}</div>
+        <div class="info-block"><span class="label">建议</span>${info.advice}</div>
+      </div>`;
+  }).join('');
+
+  // CTAs - prefer weakness dims, else show top 2
+  const ctaList = (weaknesses.length > 0 ? weaknesses : sortedAsc.slice(0, 2))
+    .map(d => DIM_CONFIG[d.name].cta);
+  document.getElementById('r-ctas').innerHTML = ctaList.map(cta => `
+    <div class="cta-card">
+      <span class="title">${cta}</span>
+      <span class="arrow">→</span>
+    </div>`).join('');
+
+  showView('result');
+}
+
+function getLevel(rawScore) {
+  if (rawScore <= 8) return '待破局';
+  if (rawScore <= 12) return '入门';
+  if (rawScore <= 16) return '进阶';
+  return '专家';
+}
+
+function getLevelByDisplay(displayScore) {
+  if (displayScore < 45) return '待破局';
+  if (displayScore < 65) return '入门';
+  if (displayScore < 85) return '进阶';
+  return '专家';
+}
+
+function getTagline(totalScore) {
+  if (totalScore < 45) return '商业力待破局，每个维度都有大量提升空间。建议从最弱的一项开始撬动。';
+  if (totalScore < 65) return '已有一些零散动作，但还没串成系统。先聚焦补一两个短板。';
+  if (totalScore < 85) return '你已经摸到了商业增长的大门，接下来差临门一脚的系统化。';
+  return '商业力成熟，建议聚焦放大优势项，把单点变成壁垒。';
+}
+
+function restart() {
+  currentIndex = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  displayedOptions = new Array(QUESTIONS.length).fill(null);
+  showView('welcome');
+}
+</script>
+</body>
+</html>
