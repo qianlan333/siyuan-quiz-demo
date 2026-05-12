@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#ff7e5f">
-<title>小 IP 商业力测评</title>
+<meta name="theme-color" content="#f05f43">
+<title>小 IP 商业力测评 · 预览版</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif; }
-body { background: #fdf8f3; color: #2c2620; line-height: 1.6; min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
+body { background: #f6f7fb; color: #25272d; line-height: 1.6; min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
 .app { max-width: 600px; margin: 0 auto; padding: 24px 16px 40px; }
 .view { display: none; }
 .view.active { display: block; animation: fadeIn 0.25s ease; }
@@ -16,82 +16,85 @@ body { background: #fdf8f3; color: #2c2620; line-height: 1.6; min-height: 100vh;
 
 /* Welcome */
 .welcome { padding: 24px 8px; }
-.welcome h1 { font-size: 28px; margin-bottom: 8px; color: #1a1612; text-align: center; letter-spacing: -0.5px; }
-.welcome .subtitle { color: #8a7a6e; font-size: 14px; margin-bottom: 28px; text-align: center; }
-.welcome .desc { background: white; padding: 22px 24px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(184,144,116,0.08); }
-.welcome .desc h3 { font-size: 14px; color: #8a7a6e; margin-bottom: 14px; font-weight: 500; }
+.welcome h1 { font-size: 28px; margin-bottom: 8px; color: #171923; text-align: center; letter-spacing: 0; }
+.welcome .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 14px; text-align: center; }
+.preview-meta { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.preview-meta span { padding: 4px 10px; background: #eef6ff; color: #21649f; border: 1px solid #d9eafe; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.welcome .desc { background: white; padding: 22px 24px; border-radius: 8px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(31,41,55,0.06); border: 1px solid #eceff5; }
+.welcome .desc h3 { font-size: 14px; color: #6b7280; margin-bottom: 14px; font-weight: 500; }
 .welcome .desc ul { list-style: none; }
-.welcome .desc li { padding: 7px 0; color: #2c2620; font-size: 15px; display: flex; align-items: center; }
-.welcome .desc li .dot { display: inline-block; width: 6px; height: 6px; background: #ff7e5f; border-radius: 50%; margin-right: 12px; flex-shrink: 0; }
-.welcome .hint { font-size: 13px; color: #8a7a6e; line-height: 1.6; padding: 0 4px; margin-bottom: 24px; }
+.welcome .desc li { padding: 7px 0; color: #25272d; font-size: 15px; display: flex; align-items: center; }
+.welcome .desc li .dot { display: inline-block; width: 6px; height: 6px; background: #1f8f78; border-radius: 50%; margin-right: 12px; flex-shrink: 0; }
+.welcome .hint { font-size: 13px; color: #6b7280; line-height: 1.6; padding: 0 4px; margin-bottom: 24px; }
 
 /* Buttons */
-.btn { display: block; width: 100%; padding: 15px 24px; background: #ff7e5f; color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; text-align: center; transition: transform 0.1s, opacity 0.15s, background 0.15s; font-family: inherit; }
+.btn { display: block; width: 100%; padding: 15px 24px; background: #f05f43; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; text-align: center; transition: transform 0.1s, opacity 0.15s, background 0.15s; font-family: inherit; }
 .btn:active { transform: scale(0.98); opacity: 0.92; }
-.btn:disabled { background: #e5dcd2; color: #b5a89a; cursor: not-allowed; }
+.btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
 .btn:disabled:active { transform: none; }
-.btn-secondary { background: white; color: #6e5e51; border: 1.5px solid #e5dcd2; }
-.btn-secondary:active { background: #fdf8f3; }
+.btn-secondary { background: white; color: #475569; border: 1.5px solid #d8dde8; }
+.btn-secondary:active { background: #f6f7fb; }
+.quick-preview { margin-top: 12px; }
 
 /* Quiz */
 .progress { margin-bottom: 20px; }
-.progress-info { display: flex; justify-content: space-between; font-size: 13px; color: #8a7a6e; margin-bottom: 8px; padding: 0 2px; }
-.progress-info .index { font-weight: 600; color: #ff7e5f; }
-.progress-bar-container { height: 5px; background: #ede4d8; border-radius: 3px; overflow: hidden; }
-.progress-bar { height: 100%; background: linear-gradient(90deg, #ff7e5f, #feb47b); transition: width 0.3s ease; border-radius: 3px; }
+.progress-info { display: flex; justify-content: space-between; font-size: 13px; color: #6b7280; margin-bottom: 8px; padding: 0 2px; }
+.progress-info .index { font-weight: 600; color: #f05f43; }
+.progress-bar-container { height: 5px; background: #e5eaf2; border-radius: 3px; overflow: hidden; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, #f05f43, #1f8f78); transition: width 0.3s ease; border-radius: 3px; }
 
-.question-card { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 2px 12px rgba(184,144,116,0.08); margin-bottom: 14px; }
-.dim-tag { display: inline-block; padding: 4px 12px; background: #fff0eb; color: #ff7e5f; font-size: 12px; border-radius: 12px; margin-bottom: 12px; font-weight: 500; }
-.question-text { font-size: 18px; font-weight: 600; color: #1a1612; line-height: 1.55; }
+.question-card { background: white; padding: 24px; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,41,55,0.06); margin-bottom: 14px; border: 1px solid #eceff5; }
+.dim-tag { display: inline-block; padding: 4px 12px; background: #e9f7f3; color: #157261; font-size: 12px; border-radius: 12px; margin-bottom: 12px; font-weight: 500; }
+.question-text { font-size: 18px; font-weight: 600; color: #171923; line-height: 1.55; }
 
 .options { display: flex; flex-direction: column; gap: 10px; }
-.option { background: white; padding: 16px 18px; border: 1.5px solid #ece2d6; border-radius: 12px; cursor: pointer; color: #2c2620; font-size: 15px; line-height: 1.5; text-align: left; transition: all 0.15s; user-select: none; }
+.option { background: white; padding: 16px 18px; border: 1.5px solid #d8dde8; border-radius: 8px; cursor: pointer; color: #25272d; font-size: 15px; line-height: 1.5; text-align: left; transition: all 0.15s; user-select: none; }
 .option:active { transform: scale(0.99); }
-.option.selected { border-color: #ff7e5f; background: #fff5f0; box-shadow: 0 0 0 3px rgba(255,126,95,0.1); }
+.option.selected { border-color: #f05f43; background: #fff4f1; box-shadow: 0 0 0 3px rgba(240,95,67,0.1); }
 
 .quiz-nav { display: flex; gap: 12px; margin-top: 24px; }
 .quiz-nav .btn-secondary { width: 110px; flex-shrink: 0; }
 .quiz-nav .btn:not(.btn-secondary) { flex: 1; }
 
 /* Result */
-.overview { background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); color: white; padding: 32px 24px; border-radius: 20px; margin-bottom: 16px; text-align: center; box-shadow: 0 8px 24px rgba(255,126,95,0.25); }
+.overview { background: linear-gradient(135deg, #f05f43 0%, #1f8f78 100%); color: white; padding: 32px 24px; border-radius: 8px; margin-bottom: 16px; text-align: center; box-shadow: 0 12px 28px rgba(31,41,55,0.14); }
 .overview .label { font-size: 13px; opacity: 0.85; margin-bottom: 4px; }
-.overview .total-score { font-size: 64px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+.overview .total-score { font-size: 64px; font-weight: 700; line-height: 1; letter-spacing: 0; }
 .overview .total-score-suffix { font-size: 18px; opacity: 0.85; margin-left: 4px; font-weight: 500; }
 .overview .level { display: inline-block; padding: 5px 16px; background: rgba(255,255,255,0.22); border-radius: 14px; font-size: 13px; margin: 14px 0 16px; backdrop-filter: blur(4px); font-weight: 500; }
 .overview .tagline { font-size: 14px; line-height: 1.65; opacity: 0.95; padding: 0 8px; }
 
-.strength-weakness { background: white; padding: 18px 22px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(184,144,116,0.08); }
+.strength-weakness { background: white; padding: 18px 22px; border-radius: 8px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(31,41,55,0.06); border: 1px solid #eceff5; }
 .sw-block { padding: 6px 0; }
-.sw-block + .sw-block { border-top: 1px solid #f5ede2; margin-top: 10px; padding-top: 14px; }
-.sw-block h4 { font-size: 13px; color: #8a7a6e; margin-bottom: 8px; font-weight: 500; }
-.sw-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; color: #2c2620; font-size: 15px; }
+.sw-block + .sw-block { border-top: 1px solid #eceff5; margin-top: 10px; padding-top: 14px; }
+.sw-block h4 { font-size: 13px; color: #6b7280; margin-bottom: 8px; font-weight: 500; }
+.sw-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; color: #25272d; font-size: 15px; }
 .sw-item .name { font-weight: 500; }
-.sw-item .score { color: #ff7e5f; font-weight: 600; font-size: 16px; }
-.sw-item.weakness .score { color: #d97c5f; }
-.sw-empty { font-size: 13px; color: #8a7a6e; padding: 6px 0; }
+.sw-item .score { color: #f05f43; font-weight: 600; font-size: 16px; }
+.sw-item.weakness .score { color: #d85a3f; }
+.sw-empty { font-size: 13px; color: #6b7280; padding: 6px 0; }
 
-.section-title { font-size: 18px; font-weight: 700; color: #1a1612; margin: 28px 0 14px; padding-left: 4px; letter-spacing: -0.3px; }
+.section-title { font-size: 18px; font-weight: 700; color: #171923; margin: 28px 0 14px; padding-left: 4px; letter-spacing: 0; }
 
-.dim-card { background: white; padding: 20px 22px; border-radius: 16px; margin-bottom: 12px; box-shadow: 0 2px 12px rgba(184,144,116,0.08); border-left: 4px solid transparent; }
-.dim-card.weakness { border-left-color: #ff7e5f; }
+.dim-card { background: white; padding: 20px 22px; border-radius: 8px; margin-bottom: 12px; box-shadow: 0 8px 24px rgba(31,41,55,0.06); border: 1px solid #eceff5; border-left: 4px solid transparent; }
+.dim-card.weakness { border-left-color: #f05f43; }
 .dim-card .head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 12px; }
-.dim-card .name { font-size: 16px; font-weight: 600; color: #1a1612; }
+.dim-card .name { font-size: 16px; font-weight: 600; color: #171923; }
 .dim-card .score-block { text-align: right; flex-shrink: 0; }
-.dim-card .score-num { font-size: 26px; font-weight: 700; color: #ff7e5f; line-height: 1; }
-.dim-card .level-text { font-size: 12px; color: #8a7a6e; margin-left: 4px; }
-.dim-card .type-tag { display: inline-block; padding: 4px 12px; background: #fff5f0; color: #ff7e5f; font-size: 13px; border-radius: 10px; margin-bottom: 14px; font-weight: 600; }
-.dim-card .info-block { margin-bottom: 8px; font-size: 14px; line-height: 1.6; color: #4a3f36; padding-left: 2px; }
+.dim-card .score-num { font-size: 26px; font-weight: 700; color: #f05f43; line-height: 1; }
+.dim-card .level-text { font-size: 12px; color: #6b7280; margin-left: 4px; }
+.dim-card .type-tag { display: inline-block; padding: 4px 12px; background: #fff4f1; color: #d94d34; font-size: 13px; border-radius: 10px; margin-bottom: 14px; font-weight: 600; }
+.dim-card .info-block { margin-bottom: 8px; font-size: 14px; line-height: 1.6; color: #374151; padding-left: 2px; }
 .dim-card .info-block:last-child { margin-bottom: 0; }
-.dim-card .info-block .label { display: inline-block; color: #8a7a6e; font-size: 12px; margin-right: 4px; min-width: 32px; }
+.dim-card .info-block .label { display: inline-block; color: #6b7280; font-size: 12px; margin-right: 4px; min-width: 32px; }
 
-.cta-card { background: white; padding: 16px 20px; border-radius: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 12px rgba(184,144,116,0.08); cursor: pointer; transition: transform 0.1s; }
+.cta-card { background: white; padding: 16px 20px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 24px rgba(31,41,55,0.06); border: 1px solid #eceff5; cursor: pointer; transition: transform 0.1s; }
 .cta-card:active { transform: scale(0.99); }
-.cta-card .title { font-size: 15px; color: #1a1612; font-weight: 500; }
-.cta-card .arrow { color: #ff7e5f; font-size: 20px; font-weight: 300; }
+.cta-card .title { font-size: 15px; color: #171923; font-weight: 500; }
+.cta-card .arrow { color: #f05f43; font-size: 20px; font-weight: 300; }
 
 .footer-actions { margin-top: 32px; padding-bottom: 16px; }
-.demo-tip { font-size: 12px; color: #b5a89a; text-align: center; margin-top: 16px; padding: 0 12px; line-height: 1.6; }
+.demo-tip { font-size: 12px; color: #9ca3af; text-align: center; margin-top: 16px; padding: 0 12px; line-height: 1.6; }
 
 @media (max-width: 380px) {
   .welcome h1 { font-size: 24px; }
@@ -107,6 +110,11 @@ body { background: #fdf8f3; color: #2c2620; line-height: 1.6; min-height: 100vh;
   <div class="welcome">
     <h1>小 IP 商业力测评</h1>
     <p class="subtitle">5 维度 · 25 题 · 5-7 分钟</p>
+    <div class="preview-meta">
+      <span>业务预览版</span>
+      <span>不保存数据</span>
+      <span>含结果页样例</span>
+    </div>
     <div class="desc">
       <h3>你将测评的 5 个维度</h3>
       <ul>
@@ -119,6 +127,7 @@ body { background: #fdf8f3; color: #2c2620; line-height: 1.6; min-height: 100vh;
     </div>
     <p class="hint">每题选择最贴近你真实状态的一项，没有"标准答案"，凭直觉作答即可。</p>
     <button class="btn" onclick="startQuiz()">开始测评 →</button>
+    <button class="btn btn-secondary quick-preview" onclick="previewSample()">先看结果页样例</button>
   </div>
 </section>
 
@@ -156,11 +165,11 @@ body { background: #fdf8f3; color: #2c2620; line-height: 1.6; min-height: 100vh;
 
   <div class="strength-weakness">
     <div class="sw-block">
-      <h4>★ 优势项</h4>
+      <h4>优势项</h4>
       <div id="r-strengths"></div>
     </div>
     <div class="sw-block">
-      <h4>⚠ 劣势项</h4>
+      <h4>劣势项</h4>
       <div id="r-weaknesses"></div>
     </div>
   </div>
@@ -410,6 +419,27 @@ function showView(name) {
 function startQuiz() {
   showView('quiz');
   showQuestion(0);
+}
+
+function previewSample() {
+  const scorePlan = {
+    '用户获取': [3, 4, 3, 3, 4],
+    '用户维护': [2, 3, 3, 2, 3],
+    '用户成交': [1, 2, 2, 1, 2],
+    '用户交付': [3, 3, 2, 3, 3],
+    '用户裂变': [1, 2, 2, 2, 2]
+  };
+  const dimSeen = {};
+  currentIndex = 0;
+  displayedOptions = QUESTIONS.map(q => [...q.options]);
+  answers = QUESTIONS.map((q, idx) => {
+    const order = dimSeen[q.dim] || 0;
+    dimSeen[q.dim] = order + 1;
+    const targetScore = scorePlan[q.dim][order] || 3;
+    const optionIndex = displayedOptions[idx].findIndex(opt => opt.score === targetScore);
+    return optionIndex >= 0 ? optionIndex : 0;
+  });
+  computeAndShowResults();
 }
 
 function showQuestion(idx) {
