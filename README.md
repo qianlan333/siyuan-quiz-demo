@@ -30,4 +30,7 @@
 
 部署在 GitHub Pages 上，提交后 URL 会出现在仓库的 Pages 设置里。
 
+- H5 测评页：`/`
+- 后台配置页 Demo：`/admin.html`
+
 > 这是一个体感 demo，前端纯展示，不持久化任何数据。
