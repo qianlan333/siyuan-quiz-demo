@@ -4,21 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#111827">
-<title>多维测评问卷配置台 Demo</title>
+<title>测评模板工作台 Demo</title>
 <style>
 :root {
-  --bg: #f4f6f8;
+  --bg: #eef2f7;
   --panel: #ffffff;
+  --panel-soft: #f8fafc;
   --ink: #17202a;
   --muted: #667085;
   --line: #d9dee7;
-  --line-soft: #eceff5;
+  --line-soft: #edf1f6;
   --accent: #e95738;
+  --accent-soft: #fff1ec;
+  --blue: #2563eb;
+  --blue-soft: #eaf1ff;
   --green: #12826e;
-  --blue: #2f65a7;
+  --green-soft: #e7f6f1;
   --yellow: #b97819;
-  --danger: #c24132;
-  --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --yellow-soft: #fff6df;
+  --danger: #b42318;
+  --shadow: 0 18px 45px rgba(15, 23, 42, 0.09);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,7 +38,11 @@ button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 a { color: inherit; text-decoration: none; }
 
-.shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100vh; }
+.shell {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  min-height: 100vh;
+}
 .sidebar {
   background: #111827;
   color: #f8fafc;
@@ -43,19 +52,24 @@ a { color: inherit; text-decoration: none; }
   height: 100vh;
   overflow: auto;
 }
-.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 26px;
+}
 .brand-mark {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent), var(--green));
+  background: linear-gradient(135deg, #e95738, #12826e);
   display: grid;
   place-items: center;
   font-weight: 800;
 }
-.brand-title { font-size: 15px; font-weight: 700; }
-.brand-subtitle { font-size: 12px; color: #a7b0bf; margin-top: 2px; }
-.nav-label { font-size: 12px; color: #8b95a7; margin: 20px 8px 8px; }
+.brand-title { font-size: 15px; font-weight: 760; }
+.brand-subtitle { color: #a7b0bf; font-size: 12px; margin-top: 2px; }
+.nav-label { color: #8b95a7; font-size: 12px; margin: 20px 8px 8px; }
 .nav-btn {
   width: 100%;
   border: 0;
@@ -67,42 +81,42 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
-.nav-btn:hover { background: rgba(255, 255, 255, 0.07); }
-.nav-btn.active { background: #ffffff; color: #111827; }
+.nav-btn:hover { background: rgba(255,255,255,0.07); }
+.nav-btn.active { background: #fff; color: #111827; }
 .nav-index {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.12);
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
   display: grid;
   place-items: center;
+  background: rgba(255,255,255,0.12);
   font-size: 12px;
   flex: 0 0 auto;
 }
-.nav-btn.active .nav-index { background: #eef2f7; color: var(--accent); }
+.nav-btn.active .nav-index { background: var(--accent-soft); color: var(--accent); }
 .side-note {
-  margin-top: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: 8px;
+  color: #cbd5e1;
   padding: 14px;
-  color: #c9d1df;
+  margin-top: 28px;
   font-size: 12px;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .main { min-width: 0; }
 .topbar {
-  background: rgba(244, 246, 248, 0.92);
+  background: rgba(238, 242, 247, 0.92);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
-  z-index: 10;
-  border-bottom: 1px solid var(--line);
+  z-index: 20;
 }
 .topbar-inner {
-  max-width: 1280px;
+  max-width: 1480px;
   margin: 0 auto;
   padding: 18px 24px;
   display: flex;
@@ -110,7 +124,7 @@ a { color: inherit; text-decoration: none; }
   justify-content: space-between;
   gap: 18px;
 }
-.title-block h1 { font-size: 22px; letter-spacing: 0; }
+.title-block h1 { font-size: 23px; letter-spacing: 0; }
 .title-block p { color: var(--muted); font-size: 13px; margin-top: 4px; }
 .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
 .btn {
@@ -119,21 +133,29 @@ a { color: inherit; text-decoration: none; }
   color: var(--ink);
   border-radius: 8px;
   padding: 10px 14px;
-  font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
 }
-.btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
-.btn.green { background: var(--green); color: white; border-color: var(--green); }
+.btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+.btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.ghost { background: transparent; }
+.btn.small { min-height: 34px; padding: 7px 10px; font-size: 12px; }
+.btn.full { width: 100%; }
 .btn:hover { filter: brightness(0.98); }
 .btn:active { transform: translateY(1px); }
 
 .page {
-  max-width: 1280px;
+  max-width: 1480px;
   margin: 0 auto;
   padding: 22px 24px 42px;
 }
-.summary-strip {
+.view { display: none; }
+.view.active { display: block; }
+.metric-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
@@ -143,194 +165,351 @@ a { color: inherit; text-decoration: none; }
   background: var(--panel);
   border: 1px solid var(--line-soft);
   border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  padding: 15px 16px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
 }
 .metric .label { color: var(--muted); font-size: 12px; }
-.metric .value { font-size: 24px; font-weight: 750; margin-top: 5px; }
+.metric .value { font-size: 24px; font-weight: 800; margin-top: 4px; }
 .metric .hint { color: var(--muted); font-size: 12px; margin-top: 4px; }
 
-.workspace {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 330px;
-  gap: 16px;
-  align-items: start;
-}
-.content { min-width: 0; }
-.section {
-  display: none;
+.panel {
   background: var(--panel);
   border: 1px solid var(--line-soft);
   border-radius: 8px;
   box-shadow: var(--shadow);
   overflow: hidden;
 }
-.section.active { display: block; }
-.section-head {
-  padding: 18px 20px;
+.panel-head {
+  padding: 17px 20px;
   border-bottom: 1px solid var(--line-soft);
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 14px;
 }
-.section-head h2 { font-size: 18px; letter-spacing: 0; }
-.section-head p { color: var(--muted); font-size: 13px; margin-top: 4px; }
-.section-body { padding: 20px; }
+.panel-head h2 { font-size: 18px; }
+.panel-head p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.panel-body { padding: 20px; }
 
-.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
+.template-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.template-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 16px;
+}
+.template-card.active { border-color: #f0b5a7; background: #fffaf7; }
+.template-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+.template-title h3 { font-size: 17px; }
+.template-card p { color: var(--muted); font-size: 13px; margin-top: 8px; }
+.template-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.mini-stat { background: var(--panel-soft); border-radius: 8px; padding: 10px; }
+.mini-stat b { display: block; font-size: 18px; }
+.mini-stat span { color: var(--muted); font-size: 12px; }
+.card-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+.flow-list { display: grid; gap: 10px; }
+.flow-item {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  padding: 13px;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 10px;
+  background: #fff;
+}
+.flow-no {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: #111827;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+.flow-item h4 { font-size: 14px; }
+.flow-item p { color: var(--muted); font-size: 12px; margin-top: 3px; }
+
+.builder {
+  display: grid;
+  grid-template-columns: 290px minmax(460px, 1fr) 390px;
+  gap: 16px;
+  align-items: stretch;
+}
+.toolbox,
+.stage,
+.inspector {
+  background: var(--panel);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+.toolbox { padding: 16px; }
+.toolbox h2, .inspector h2 { font-size: 18px; margin-bottom: 4px; }
+.toolbox > p, .inspector > p { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+.tool-list { display: grid; gap: 9px; margin-top: 14px; }
+.tool {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fffaf4;
+  padding: 13px;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  text-align: left;
+}
+.tool:hover { border-color: #f0b5a7; }
+.tool-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-weight: 800;
+}
+.tool strong { display: block; font-size: 14px; }
+.tool span { color: var(--muted); font-size: 12px; display: block; margin-top: 2px; }
+.tool.emphasis {
+  background: var(--blue-soft);
+  border-color: #c9dcff;
+}
+.tool.emphasis .tool-mark { background: #fff; }
+.tool.disabled { opacity: 0.55; }
+
+.stage {
+  padding: 22px;
+  display: flex;
+  justify-content: center;
+  min-height: 690px;
+}
+.phone {
+  width: min(100%, 430px);
+  background: #fbfcfe;
+  border: 1px solid #dfe6ef;
+  border-radius: 8px;
+  padding: 14px;
+  box-shadow: inset 0 0 0 10px #f7efe2, 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+.speaker {
+  width: 120px;
+  height: 16px;
+  border-radius: 999px;
+  background: #3d3328;
+  margin: 0 auto 18px;
+}
+.phone-screen {
+  background: #fff;
+  border: 1px solid #dde7f5;
+  border-radius: 8px;
+  min-height: 610px;
+  padding: 16px;
+  overflow: hidden;
+}
+.phone-kicker {
+  display: inline-flex;
+  background: var(--blue-soft);
+  color: var(--blue);
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: 750;
+  margin-bottom: 10px;
+}
+.phone h3 { font-size: 20px; margin-bottom: 7px; }
+.phone p { color: var(--muted); font-size: 13px; }
+.question-list { display: grid; gap: 10px; margin-top: 14px; }
+.question-chip {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 12px;
+  text-align: left;
+}
+.question-chip.active { border-color: #f0b5a7; background: #fff8f4; }
+.question-chip .top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.question-chip strong { font-size: 14px; display: block; }
+.option-preview {
+  margin-top: 9px;
+  display: grid;
+  gap: 7px;
+}
+.option-row {
+  background: #fff8ef;
+  border: 1px solid #f3e1ca;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+}
+.option-row span:last-child { color: var(--muted); white-space: nowrap; }
+.more-line {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 10px;
+  text-align: center;
+}
+
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.field { display: grid; gap: 6px; }
 .field.span-2 { grid-column: 1 / -1; }
-.field label { display: block; color: #344054; font-size: 13px; font-weight: 650; margin-bottom: 7px; }
+.field label { color: #344054; font-size: 12px; font-weight: 750; }
 .field input, .field select, .field textarea {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fff;
   color: var(--ink);
-  padding: 10px 12px;
-  min-height: 42px;
+  padding: 10px 11px;
+  min-height: 40px;
 }
-.field textarea { min-height: 88px; resize: vertical; }
-.field .help { color: var(--muted); font-size: 12px; margin-top: 6px; }
+.field textarea { min-height: 78px; resize: vertical; }
+.field .help { color: var(--muted); font-size: 12px; }
 
-.inline-list { display: flex; gap: 8px; flex-wrap: wrap; }
-.tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 999px;
+.inspector { padding: 16px; align-self: start; position: sticky; top: 92px; max-height: calc(100vh - 116px); overflow: auto; }
+.tabs { display: flex; gap: 7px; margin: 13px 0; flex-wrap: wrap; }
+.tab {
   border: 1px solid var(--line);
   background: #fff;
+  border-radius: 999px;
   color: #475467;
-  padding: 6px 10px;
+  padding: 7px 10px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 750;
 }
-.tag.green { color: var(--green); background: #e9f7f3; border-color: #cceae1; }
-.tag.orange { color: var(--accent); background: #fff1ed; border-color: #ffd6cc; }
-.tag.blue { color: var(--blue); background: #eef6ff; border-color: #d6e8ff; }
-.tag.yellow { color: var(--yellow); background: #fff7e7; border-color: #ffe1a6; }
-
-.table-wrap { overflow: auto; border: 1px solid var(--line-soft); border-radius: 8px; }
-table { width: 100%; border-collapse: collapse; min-width: 780px; background: #fff; }
-th, td { border-bottom: 1px solid var(--line-soft); padding: 12px 14px; text-align: left; vertical-align: top; }
-th { background: #f8fafc; color: #475467; font-size: 12px; font-weight: 700; white-space: nowrap; }
-td { font-size: 13px; }
-tbody tr:hover { background: #fbfcfe; }
-tbody tr.selected { background: #fff4f1; }
-.dim-name { font-weight: 750; }
-.muted { color: var(--muted); }
-.score-range { font-variant-numeric: tabular-nums; color: var(--blue); font-weight: 700; }
-.priority-list { display: flex; flex-wrap: wrap; gap: 5px; }
-.priority-list span { background: #f2f4f7; color: #344054; border-radius: 6px; padding: 3px 6px; font-size: 12px; }
-
-.filter-bar {
+.tab.active { background: #111827; color: #fff; border-color: #111827; }
+.inspector-section { display: none; }
+.inspector-section.active { display: block; }
+.config-block {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fffaf4;
+  padding: 13px;
+  margin-bottom: 12px;
+}
+.config-block h4 {
+  font-size: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
 }
-.dim-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
-.dim-tab {
-  border: 1px solid var(--line);
+.compact-list { display: grid; gap: 8px; }
+.compact-item {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
   background: #fff;
-  color: #475467;
-  border-radius: 8px;
-  padding: 8px 11px;
-  font-size: 13px;
-  font-weight: 650;
-}
-.dim-tab.active { background: #111827; color: #fff; border-color: #111827; }
-.search-box {
-  width: 220px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 9px 11px;
-  min-height: 38px;
-}
-.question-title { max-width: 360px; font-weight: 650; }
-.option-mini {
-  display: grid;
-  gap: 4px;
-  color: #475467;
-}
-.option-mini span { font-size: 12px; }
-
-.rules-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-.rule-block {
-  border: 1px solid var(--line-soft);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.rule-block h3 {
-  font-size: 14px;
-  background: #f8fafc;
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--line-soft);
-}
-.rule-block ul { list-style: none; padding: 12px 14px; display: grid; gap: 10px; }
-.rule-block li { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
-.rule-block strong { color: var(--ink); }
-.rule-block span { color: var(--muted); text-align: right; }
-
-.publish-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.publish-line {
-  border: 1px solid var(--line-soft);
-  border-radius: 8px;
-  padding: 14px;
-}
-.publish-line h3 { font-size: 14px; margin-bottom: 8px; }
-.publish-line p { color: var(--muted); font-size: 13px; }
-.code-box {
-  margin-top: 10px;
-  background: #111827;
-  color: #e5e7eb;
-  border-radius: 8px;
-  padding: 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 12px;
-  overflow: auto;
-}
-
-.inspector {
-  position: sticky;
-  top: 90px;
-  display: grid;
-  gap: 12px;
-}
-.inspector-panel {
-  background: #fff;
-  border: 1px solid var(--line-soft);
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
-  overflow: hidden;
-}
-.inspector-panel h3 {
-  font-size: 14px;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--line-soft);
-  background: #f8fafc;
-}
-.inspector-body { padding: 14px 16px; }
-.kv { display: grid; gap: 10px; }
-.kv-row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
-.kv-row span:first-child { color: var(--muted); }
-.kv-row span:last-child { font-weight: 700; text-align: right; }
-.selected-question { font-size: 14px; font-weight: 750; margin-bottom: 12px; }
-.option-card {
-  border: 1px solid var(--line-soft);
-  border-radius: 8px;
   padding: 10px;
+  font-size: 13px;
+}
+.compact-item .meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.level-row {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  border: 1px solid var(--line-soft);
+  background: #fff;
+  border-radius: 8px;
+  padding: 9px;
   margin-bottom: 8px;
 }
-.option-card .meta { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-bottom: 6px; }
-.option-card .copy { font-size: 13px; color: #344054; }
+.level-row b { color: var(--blue); }
+.level-row p { color: var(--muted); font-size: 12px; }
+.type-grid { display: grid; gap: 8px; }
+.type-card {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px;
+}
+.type-card .head { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 5px; }
+.type-card strong { font-size: 13px; }
+.type-card p { color: var(--muted); font-size: 12px; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: #475467;
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+.tag.blue { color: var(--blue); background: var(--blue-soft); border-color: #c9dcff; }
+.tag.green { color: var(--green); background: var(--green-soft); border-color: #bfe4d8; }
+.tag.orange { color: var(--accent); background: var(--accent-soft); border-color: #ffd6cc; }
+.tag.yellow { color: var(--yellow); background: var(--yellow-soft); border-color: #ffe0a3; }
+.tag.gray { color: #475467; background: #f2f4f7; border-color: #e4e7ec; }
+.muted { color: var(--muted); font-size: 12px; margin-top: 5px; }
+
+.template-group {
+  border: 1px solid #bfd3ff;
+  background: #f7faff;
+  border-radius: 8px;
+  padding: 13px;
+  margin-top: 14px;
+}
+.template-group-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.template-group h4 { font-size: 15px; }
+.group-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.notice {
+  border: 1px dashed #c9dcff;
+  background: #f8fbff;
+  border-radius: 8px;
+  padding: 11px;
+  color: #475467;
+  font-size: 13px;
+  margin-top: 12px;
+}
+.empty-state {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 28px 14px;
+  text-align: center;
+  color: var(--muted);
+  margin-top: 14px;
+}
+.divider { height: 1px; background: var(--line-soft); margin: 14px 0; }
 .toast {
   position: fixed;
   right: 22px;
@@ -344,22 +523,26 @@ tbody tr.selected { background: #fff4f1; }
   transform: translateY(8px);
   pointer-events: none;
   transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 50;
   font-size: 13px;
-  z-index: 30;
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 
-@media (max-width: 1080px) {
+@media (max-width: 1220px) {
+  .builder { grid-template-columns: 260px minmax(420px, 1fr); }
+  .inspector { grid-column: 1 / -1; position: static; max-height: none; }
+}
+@media (max-width: 980px) {
   .shell { grid-template-columns: 1fr; }
   .sidebar { position: static; height: auto; }
-  .workspace { grid-template-columns: 1fr; }
-  .inspector { position: static; }
+  .grid-2, .builder, .template-grid, .metric-strip { grid-template-columns: 1fr; }
+  .stage { min-height: 0; }
 }
-@media (max-width: 720px) {
+@media (max-width: 680px) {
   .topbar-inner { align-items: flex-start; flex-direction: column; }
-  .summary-strip, .form-grid, .rules-grid, .publish-grid { grid-template-columns: 1fr; }
+  .page { padding: 16px; }
+  .form-grid { grid-template-columns: 1fr; }
   .field.span-2 { grid-column: auto; }
-  .search-box { width: 100%; }
 }
 </style>
 </head>
@@ -369,18 +552,16 @@ tbody tr.selected { background: #fff4f1; }
     <div class="brand">
       <div class="brand-mark">测</div>
       <div>
-        <div class="brand-title">问卷配置台</div>
-        <div class="brand-subtitle">多维测评 Demo</div>
+        <div class="brand-title">测评模板工作台</div>
+        <div class="brand-subtitle">模板配置 + 问卷引用 Demo</div>
       </div>
     </div>
-    <div class="nav-label">配置步骤</div>
-    <button class="nav-btn active" data-section="basic"><span class="nav-index">1</span>问卷基础</button>
-    <button class="nav-btn" data-section="dimensions"><span class="nav-index">2</span>维度与分型</button>
-    <button class="nav-btn" data-section="questions"><span class="nav-index">3</span>题目与选项</button>
-    <button class="nav-btn" data-section="results"><span class="nav-index">4</span>结果页规则</button>
-    <button class="nav-btn" data-section="publish"><span class="nav-index">5</span>发布与联动</button>
+    <div class="nav-label">演示页面</div>
+    <button class="nav-btn active" data-view="templates"><span class="nav-index">1</span>测评模板资产</button>
+    <button class="nav-btn" data-view="template-editor"><span class="nav-index">2</span>创建测评问卷模板</button>
+    <button class="nav-btn" data-view="form-editor"><span class="nav-index">3</span>普通问卷引用模板</button>
     <div class="side-note">
-      这个页面只演示后台应该如何配置多维测评。单选、多选、手机号、标签、webhook 等能力默认复用现有问卷能力。
+      多维测评不是侧边栏里的一个普通题型，而是一组已经配置好的测评模板。普通问卷只负责选择模板、整组插入、整组删除，并复用原有手机号、标签、webhook、提交记录能力。
     </div>
   </aside>
 
@@ -388,269 +569,217 @@ tbody tr.selected { background: #fff4f1; }
     <header class="topbar">
       <div class="topbar-inner">
         <div class="title-block">
-          <h1>小 IP 商业力测评配置</h1>
-          <p>基于现有问卷能力，新增“多维计分 + 分型 + 结果页”配置。</p>
+          <h1 id="pageTitle">测评模板资产</h1>
+          <p id="pageSubtitle">先把测评题目、维度、分型和结果页配置成模板，再给普通问卷引用。</p>
         </div>
         <div class="actions">
-          <button class="btn" data-toast="已模拟保存草稿，Demo 不会写入数据">保存草稿</button>
-          <a class="btn" href="./index.html" target="_blank">打开 H5 预览</a>
-          <button class="btn primary" data-toast="已模拟发布预览版">发布预览</button>
+          <a class="btn" href="./index.html" target="_blank">打开 H5 结果页</a>
+          <button class="btn" data-toast="已模拟保存，静态 Demo 不写入数据">保存草稿</button>
+          <button class="btn primary" data-view="template-editor">创建测评问卷模板</button>
         </div>
       </div>
     </header>
 
     <div class="page">
-      <div class="summary-strip">
-        <div class="metric">
-          <div class="label">维度数量</div>
-          <div class="value">5</div>
-          <div class="hint">每维独立计分</div>
+      <section class="view active" id="view-templates">
+        <div class="metric-strip">
+          <div class="metric">
+            <div class="label">模板数量</div>
+            <div class="value">1</div>
+            <div class="hint">可继续新增，不限制为 5 维</div>
+          </div>
+          <div class="metric">
+            <div class="label">当前模板</div>
+            <div class="value">25 题</div>
+            <div class="hint">5 个维度，每维 5 题</div>
+          </div>
+          <div class="metric">
+            <div class="label">配置方式</div>
+            <div class="value">中文选择</div>
+            <div class="hint">运营不接触 JSON 或内部字段</div>
+          </div>
+          <div class="metric">
+            <div class="label">引用方式</div>
+            <div class="value">整组引用</div>
+            <div class="hint">一键添加，一组删除</div>
+          </div>
         </div>
-        <div class="metric">
-          <div class="label">题目数量</div>
-          <div class="value">25</div>
-          <div class="hint">每维 5 题</div>
-        </div>
-        <div class="metric">
-          <div class="label">选项规则</div>
-          <div class="value">分数 + 类型</div>
-          <div class="hint">每个选项同时绑定两项</div>
-        </div>
-        <div class="metric">
-          <div class="label">结果输出</div>
-          <div class="value">总览 + 5 维</div>
-          <div class="hint">综述与分型解耦</div>
-        </div>
-      </div>
 
-      <div class="workspace">
-        <div class="content">
-          <section class="section active" id="section-basic">
-            <div class="section-head">
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head">
               <div>
-                <h2>问卷基础</h2>
-                <p>这里配置测评入口、收集字段和基础展示，不改变原有问卷提交链路。</p>
+                <h2>测评模板列表</h2>
+                <p>这里管理可被普通问卷引用的测评模板。</p>
               </div>
-              <span class="tag green">可编辑</span>
+              <button class="btn primary" data-view="template-editor">创建测评问卷模板</button>
             </div>
-            <div class="section-body">
-              <div class="form-grid">
-                <div class="field">
-                  <label>问卷名称</label>
-                  <input value="小 IP 商业力测评">
-                </div>
-                <div class="field">
-                  <label>问卷类型</label>
-                  <select>
-                    <option>多维测评问卷</option>
-                    <option>普通收集问卷</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label>适用场景</label>
-                  <select>
-                    <option>引流后诊断</option>
-                    <option>活动报名</option>
-                    <option>私域用户分层</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label>状态</label>
-                  <select>
-                    <option>预览中</option>
-                    <option>已发布</option>
-                    <option>已停用</option>
-                  </select>
-                </div>
-                <div class="field span-2">
-                  <label>开场说明</label>
-                  <textarea>5 维度、25 题，评估用户在引流、维护、成交、交付、裂变上的当前状态，并给出可运营的标签和建议。</textarea>
-                </div>
-                <div class="field span-2">
-                  <label>需要额外收集的信息</label>
-                  <div class="inline-list">
-                    <span class="tag blue">手机号：必填</span>
-                    <span class="tag blue">城市：选填</span>
-                    <span class="tag blue">当前业务阶段：选填</span>
-                    <span class="tag blue">来源渠道：自动带入</span>
+            <div class="panel-body">
+              <div class="template-grid">
+                <div class="template-card active">
+                  <div class="template-title">
+                    <div>
+                      <h3>小 IP 商业力测评</h3>
+                      <p>面向小 IP / 个体工作室，评估引流、维护、成交、交付、裂变的当前状态。</p>
+                    </div>
+                    <span class="tag green">可引用</span>
                   </div>
-                  <div class="help">这些字段走现有问卷字段能力，不属于测评算法本身。</div>
+                  <div class="template-meta">
+                    <div class="mini-stat"><b id="assetDimCount">5</b><span>维度</span></div>
+                    <div class="mini-stat"><b id="assetQuestionCount">25</b><span>题目</span></div>
+                    <div class="mini-stat"><b>4</b><span>结果层级</span></div>
+                  </div>
+                  <div class="card-actions">
+                    <button class="btn small primary" data-view="template-editor">编辑模板</button>
+                    <button class="btn small" data-toast="已模拟复制模板">复制</button>
+                    <button class="btn small" data-view="form-editor">到普通问卷引用</button>
+                  </div>
+                </div>
+                <div class="template-card">
+                  <div class="template-title">
+                    <div>
+                      <h3>空白测评模板</h3>
+                      <p>从 0 配置维度、题目、选项分数、类型和结果页反馈。</p>
+                    </div>
+                    <span class="tag gray">未创建</span>
+                  </div>
+                  <div class="template-meta">
+                    <div class="mini-stat"><b>不限</b><span>维度</span></div>
+                    <div class="mini-stat"><b>不限</b><span>题目</span></div>
+                    <div class="mini-stat"><b>自定义</b><span>分层</span></div>
+                  </div>
+                  <div class="card-actions">
+                    <button class="btn small" data-view="template-editor">创建空白模板</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
 
-          <section class="section" id="section-dimensions">
-            <div class="section-head">
+          <aside class="panel">
+            <div class="panel-head">
               <div>
-                <h2>维度与分型</h2>
-                <p>每个维度单独计分，分型只在当前维度内判断。平票时按优先级取一个结果。</p>
-              </div>
-              <span class="tag orange">平票有兜底</span>
-            </div>
-            <div class="section-body">
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>维度</th>
-                      <th>题数</th>
-                      <th>分数范围</th>
-                      <th>类型优先级</th>
-                      <th>推荐动作</th>
-                    </tr>
-                  </thead>
-                  <tbody id="dimensionRows"></tbody>
-                </table>
+                <h2>落地逻辑</h2>
+                <p>先模板，后引用。</p>
               </div>
             </div>
-          </section>
-
-          <section class="section" id="section-questions">
-            <div class="section-head">
-              <div>
-                <h2>题目与选项</h2>
-                <p>题目仍然是原有单选题能力，只是每个选项多配置“分数”和“类型”。</p>
-              </div>
-              <span class="tag blue">25 题</span>
-            </div>
-            <div class="section-body">
-              <div class="filter-bar">
-                <div class="dim-tabs" id="dimensionTabs"></div>
-                <input class="search-box" id="questionSearch" placeholder="搜索题目">
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>题号</th>
-                      <th>维度</th>
-                      <th>题目</th>
-                      <th>选项配置摘要</th>
-                      <th>状态</th>
-                    </tr>
-                  </thead>
-                  <tbody id="questionRows"></tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-
-          <section class="section" id="section-results">
-            <div class="section-head">
-              <div>
-                <h2>结果页规则</h2>
-                <p>先给总分综述，再进入 5 个维度的分数、类型和细分反馈。</p>
-              </div>
-              <span class="tag yellow">规则固定</span>
-            </div>
-            <div class="section-body">
-              <div class="rules-grid">
-                <div class="rule-block">
-                  <h3>综合分层</h3>
-                  <ul>
-                    <li><strong>待破局</strong><span>0 - 44 分</span></li>
-                    <li><strong>入门</strong><span>45 - 64 分</span></li>
-                    <li><strong>进阶</strong><span>65 - 84 分</span></li>
-                    <li><strong>专家</strong><span>85 - 100 分</span></li>
-                  </ul>
+            <div class="panel-body">
+              <div class="flow-list">
+                <div class="flow-item">
+                  <div class="flow-no">1</div>
+                  <div><h4>创建测评问卷模板</h4><p>配置题目、维度、选项分数、选项类型。</p></div>
                 </div>
-                <div class="rule-block">
-                  <h3>单维分层</h3>
-                  <ul>
-                    <li><strong>待破局</strong><span>原始 5 - 8 分</span></li>
-                    <li><strong>入门</strong><span>原始 9 - 12 分</span></li>
-                    <li><strong>进阶</strong><span>原始 13 - 16 分</span></li>
-                    <li><strong>专家</strong><span>原始 17 - 20 分</span></li>
-                  </ul>
+                <div class="flow-item">
+                  <div class="flow-no">2</div>
+                  <div><h4>配置结果页</h4><p>配置综合分层、单维分层、每类用户反馈。</p></div>
                 </div>
-                <div class="rule-block">
-                  <h3>总览输出</h3>
-                  <ul>
-                    <li><strong>综合分</strong><span>5 维平均分</span></li>
-                    <li><strong>优势项</strong><span>大于等于 65 分，取前 2</span></li>
-                    <li><strong>劣势项</strong><span>小于等于 60 分，取后 2</span></li>
-                    <li><strong>总览文案</strong><span>只看分数，不谈类型</span></li>
-                  </ul>
+                <div class="flow-item">
+                  <div class="flow-no">3</div>
+                  <div><h4>普通问卷引用模板</h4><p>从已有模板里选择，一键把整组题插入问卷。</p></div>
                 </div>
-                <div class="rule-block">
-                  <h3>维度输出</h3>
-                  <ul>
-                    <li><strong>维度分</strong><span>原始分 x 5</span></li>
-                    <li><strong>主导型</strong><span>类型票数最多</span></li>
-                    <li><strong>平票规则</strong><span>按维度优先级取一个</span></li>
-                    <li><strong>反馈字段</strong><span>特征、优势、风险、建议</span></li>
-                  </ul>
+                <div class="flow-item">
+                  <div class="flow-no">4</div>
+                  <div><h4>复用现有能力</h4><p>手机号、标签、webhook、提交记录、分享入口都走现有问卷链路。</p></div>
                 </div>
               </div>
             </div>
-          </section>
-
-          <section class="section" id="section-publish">
-            <div class="section-head">
-              <div>
-                <h2>发布与联动</h2>
-                <p>配置页只新增测评计算和结果渲染，提交、标签、webhook 复用现有能力。</p>
-              </div>
-              <span class="tag green">复用现有链路</span>
-            </div>
-            <div class="section-body">
-              <div class="publish-grid">
-                <div class="publish-line">
-                  <h3>H5 入口</h3>
-                  <p>发布后生成公开问卷链接，用户填写后直接进入测评结果页。</p>
-                  <div class="code-box">/q/{questionnaire_id}/multi-dimension</div>
-                </div>
-                <div class="publish-line">
-                  <h3>CRM 标签</h3>
-                  <p>把总分、强弱项、每维主导型写回客户画像，方便后续运营筛选。</p>
-                  <div class="code-box">quiz_total_score<br>quiz_weakest_dim<br>quiz_deal_type</div>
-                </div>
-                <div class="publish-line">
-                  <h3>Webhook</h3>
-                  <p>提交后仍按现有 webhook 推送，只新增测评结果字段。</p>
-                  <div class="code-box">event: questionnaire.submitted<br>payload.result.multi_dimension</div>
-                </div>
-                <div class="publish-line">
-                  <h3>数据查看</h3>
-                  <p>后台列表可按总分、优势项、劣势项、单维类型筛选。</p>
-                  <div class="code-box">总分 55<br>劣势项 用户成交<br>成交类型 被动型</div>
-                </div>
-              </div>
-            </div>
-          </section>
+          </aside>
         </div>
+      </section>
 
-        <aside class="inspector">
-          <div class="inspector-panel">
-            <h3>当前配置摘要</h3>
-            <div class="inspector-body">
-              <div class="kv">
-                <div class="kv-row"><span>问卷类型</span><span>多维测评</span></div>
-                <div class="kv-row"><span>计分方式</span><span>单维累加</span></div>
-                <div class="kv-row"><span>题目数量</span><span id="summaryQuestions">25</span></div>
-                <div class="kv-row"><span>类型数量</span><span>20</span></div>
-                <div class="kv-row"><span>平票处理</span><span>优先级兜底</span></div>
+      <section class="view" id="view-template-editor">
+        <div class="builder">
+          <aside class="toolbox">
+            <h2>添加题目</h2>
+            <p>这是专门创建测评模板的页面，左侧只放模板建设需要的动作。</p>
+            <div class="tool-list">
+              <button class="tool" data-toast="已模拟添加单选测评题">
+                <span class="tool-mark">单</span>
+                <span><strong>单选测评题</strong><span>每个选项配置分数和类型</span></span>
+              </button>
+              <button class="tool" data-toast="已模拟添加维度">
+                <span class="tool-mark">维</span>
+                <span><strong>添加维度</strong><span>维度不限数量，可继续追加</span></span>
+              </button>
+              <button class="tool" data-inspector-tab="result">
+                <span class="tool-mark">结</span>
+                <span><strong>结果页配置</strong><span>综合分层、维度分层、类型反馈</span></span>
+              </button>
+              <button class="tool" data-toast="已模拟导入 25 题示例模板">
+                <span class="tool-mark">模</span>
+                <span><strong>填入示例模板</strong><span>小 IP 商业力 25 题</span></span>
+              </button>
+            </div>
+            <div class="notice">这里创建的是“测评模板”，不会直接生成公开问卷。公开问卷需要在普通问卷里引用它。</div>
+          </aside>
+
+          <section class="stage">
+            <div class="phone">
+              <div class="speaker"></div>
+              <div class="phone-screen">
+                <span class="phone-kicker">测评模板预览</span>
+                <h3>小 IP 商业力测评</h3>
+                <p>模板含 <b id="editorDimCount">5</b> 个维度、<b id="editorQuestionCount">25</b> 道题。题目可继续增删，维度不固定。</p>
+                <div class="question-list" id="templateQuestionPreview"></div>
               </div>
             </div>
-          </div>
+          </section>
 
-          <div class="inspector-panel">
-            <h3>选中题目配置</h3>
-            <div class="inspector-body" id="questionInspector"></div>
-          </div>
+          <aside class="inspector">
+            <h2>配置区</h2>
+            <p>右侧只使用中文可选项，内部字段由系统生成。</p>
+            <div class="tabs">
+              <button class="tab active" data-inspector-tab="question">题目设置</button>
+              <button class="tab" data-inspector-tab="dimension">维度与分型</button>
+              <button class="tab" data-inspector-tab="result">结果页</button>
+            </div>
+            <div class="inspector-section active" id="inspector-question"></div>
+            <div class="inspector-section" id="inspector-dimension"></div>
+            <div class="inspector-section" id="inspector-result"></div>
+          </aside>
+        </div>
+      </section>
 
-          <div class="inspector-panel">
-            <h3>预览入口</h3>
-            <div class="inspector-body">
-              <div class="kv">
-                <div class="kv-row"><span>前台 demo</span><span><a href="./index.html" target="_blank">打开</a></span></div>
-                <div class="kv-row"><span>页面版本</span><span>配置台 v0.1</span></div>
+      <section class="view" id="view-form-editor">
+        <div class="builder">
+          <aside class="toolbox">
+            <h2>普通问卷题型</h2>
+            <p>保留现有问卷搭建方式，多维测评模板只是一个可插入模块。</p>
+            <div class="tool-list">
+              <button class="tool" data-toast="已模拟添加单选题"><span class="tool-mark">单</span><span><strong>单选题</strong><span>普通选项收集</span></span></button>
+              <button class="tool" data-toast="已模拟添加多选题"><span class="tool-mark">多</span><span><strong>多选题</strong><span>普通多选收集</span></span></button>
+              <button class="tool" data-toast="已模拟添加手机号题"><span class="tool-mark">号</span><span><strong>手机号题</strong><span>复用现有校验</span></span></button>
+              <button class="tool emphasis" data-insert-template><span class="tool-mark">测</span><span><strong>添加多维测评模板</strong><span>从已创建模板中选择</span></span></button>
+              <button class="tool" data-toast="标签与 webhook 仍在问卷发布配置中处理"><span class="tool-mark">联</span><span><strong>标签 / webhook</strong><span>复用现有联动能力</span></span></button>
+            </div>
+          </aside>
+
+          <section class="stage">
+            <div class="phone">
+              <div class="speaker"></div>
+              <div class="phone-screen">
+                <span class="phone-kicker">普通问卷预览</span>
+                <h3>活动报名问卷</h3>
+                <p>这里可以先收手机号、城市、来源，再整组插入一个测评模板。</p>
+                <div class="question-list">
+                  <div class="question-chip">
+                    <div class="top"><span>基础字段</span><span>手机号题</span></div>
+                    <strong>请填写你的手机号</strong>
+                    <div class="option-preview"><div class="option-row"><span>手机号输入框</span><span>必填</span></div></div>
+                  </div>
+                  <div id="templateGroupSlot"></div>
+                </div>
               </div>
             </div>
-          </div>
-        </aside>
-      </div>
+          </section>
+
+          <aside class="inspector">
+            <h2>引用配置</h2>
+            <p>模板以整组形式进入当前问卷，后续也整组管理。</p>
+            <div id="referenceInspector"></div>
+          </aside>
+        </div>
+      </section>
     </div>
   </main>
 </div>
@@ -659,282 +788,352 @@ tbody tr.selected { background: #fff4f1; }
 
 <script>
 const dimensions = [
-  { key: "用户获取", full: "用户获取（流量引入能力）", cta: "流量诊断 + 钩子设计轻咨询", priority: ["磁铁型", "钩子型", "莽撞型", "佛系型"] },
-  { key: "用户维护", full: "用户维护（关系升温能力）", cta: "朋友圈剧本 / 私域 SOP 工具包", priority: ["养鱼型", "暖男/女型", "心急型", "僵尸粉型"] },
-  { key: "用户成交", full: "用户成交（临门一脚能力）", cta: "成交话术 SOP + 案例库", priority: ["催眠型", "推销型", "压迫型", "被动型"] },
-  { key: "用户交付", full: "用户交付（预期管理能力）", cta: "交付仪式 + 超预期设计模板", priority: ["惊喜型", "打工型", "割韭菜型", "放羊型"] },
-  { key: "用户裂变", full: "用户裂变 / 升单（价值挖掘能力）", cta: "老客户运营 + 产品阶梯设计", priority: ["共生型", "利诱型", "随缘型", "一锤子型"] }
+  {
+    name: "用户获取",
+    subtitle: "流量引入能力",
+    types: ["磁铁型", "钩子型", "莽撞型", "佛系型"],
+    advice: "先明确目标用户，再设计一个可复用的引流钩子。"
+  },
+  {
+    name: "用户维护",
+    subtitle: "关系升温能力",
+    types: ["养鱼型", "暖男/女型", "心急型", "僵尸粉型"],
+    advice: "补一套加好友后的破冰、分层和持续触达节奏。"
+  },
+  {
+    name: "用户成交",
+    subtitle: "临门一脚能力",
+    types: ["催眠型", "推销型", "压迫型", "被动型"],
+    advice: "把常见异议、案例、报价和追问动作沉淀成成交 SOP。"
+  },
+  {
+    name: "用户交付",
+    subtitle: "预期管理能力",
+    types: ["惊喜型", "打工型", "割韭菜型", "放羊型"],
+    advice: "在付款后、服务前、服务中、结案时建立固定交付节点。"
+  },
+  {
+    name: "用户裂变",
+    subtitle: "价值挖掘能力",
+    types: ["共生型", "利诱型", "随缘型", "一锤子型"],
+    advice: "补老用户复购、转介绍、升单的产品阶梯和触发动作。"
+  }
 ];
 
 const questions = [
-  { id: "Q01", dim: "用户获取", title: "你想给自己加 100 个新精准粉，第一反应是？", options: [
-    ["佛系型", 1, "朋友圈吼一嗓子“求介绍”，等天上掉馅饼"],
-    ["莽撞型", 2, "进十几个群拉人，能加多少加多少，先有量再说"],
-    ["钩子型", 3, "设计个钩子，定向丢到目标群里钓鱼"],
-    ["磁铁型", 4, "写一篇戳痛点的内容发到小红书 / 视频号，等他们主动来加"]
-  ]},
-  { id: "Q02", dim: "用户获取", title: "你目前主要的引流方式是？", options: [
-    ["佛系型", 1, "老客户介绍 / 朋友帮忙拉，听天由命"],
-    ["莽撞型", 2, "不停加人 / 进群拉人，量大概率高"],
-    ["钩子型", 3, "几个固定的钩子和引流活动"],
-    ["磁铁型", 4, "内容矩阵让人主动来"]
-  ]},
-  { id: "Q03", dim: "用户获取", title: "你的引流钩子长什么样？", options: [
-    ["佛系型", 1, "没有固定钩子，临时想啥发啥"],
-    ["莽撞型", 2, "进群送资料、加我送 XXX 这类无差别钩子"],
-    ["钩子型", 3, "针对特定问题的解决方案"],
-    ["磁铁型", 4, "通过持续内容 / 人设吸引"]
-  ]},
-  { id: "Q04", dim: "用户获取", title: "看到同行 IP 涨粉很快，你的反应通常是？", options: [
-    ["佛系型", 1, "羡慕一下，觉得人家命好"],
-    ["莽撞型", 2, "去他的评论区 / 粉丝群里加人"],
-    ["钩子型", 3, "拆解他的钩子并照着设计一个"],
-    ["磁铁型", 4, "研究人设和定位，思考自己的差异化"]
-  ]},
-  { id: "Q05", dim: "用户获取", title: "如果有 1000 块预算专门用来涨粉，你会怎么花？", options: [
-    ["佛系型", 1, "不舍得花，宁可自然涨"],
-    ["莽撞型", 2, "全部砸到投流上"],
-    ["钩子型", 3, "设计引流活动，钱花在钩子物料和投放上"],
-    ["磁铁型", 4, "投在内容创作上"]
-  ]},
-  { id: "Q06", dim: "用户维护", title: "一个新朋友刚加你微信、备注好了，你下一步会做什么？", options: [
-    ["僵尸粉型", 1, "先放着，等他自己来找我说话"],
-    ["心急型", 2, "立刻甩一份产品介绍 / 价目表"],
-    ["暖男/女型", 3, "简单聊几句，问问他做什么的"],
-    ["养鱼型", 4, "有破冰节奏：自我介绍 + 小礼物 + 选择题"]
-  ]},
-  { id: "Q07", dim: "用户维护", title: "翻一下你最近一周的朋友圈，主要内容是？", options: [
-    ["僵尸粉型", 1, "有空才发，没空就空着"],
-    ["心急型", 2, "几乎全是产品广告 / 带货链接"],
-    ["暖男/女型", 3, "一半生活一半干货"],
-    ["养鱼型", 4, "每条都有定位，按节奏发"]
-  ]},
-  { id: "Q08", dim: "用户维护", title: "让你立刻说出最赚钱的 10 个客户是谁，你的反应是？", options: [
-    ["僵尸粉型", 1, "没想过这个问题"],
-    ["心急型", 2, "大概有印象，但说不出共同点"],
-    ["暖男/女型", 3, "能说出名字和大概特征"],
-    ["养鱼型", 4, "能打开表格 / 笔记说清楚"]
-  ]},
-  { id: "Q09", dim: "用户维护", title: "你上一次主动联系老用户，不是为了卖东西，是什么时候？", options: [
-    ["僵尸粉型", 1, "想不起来了"],
-    ["心急型", 2, "上次卖东西时顺便聊了两句"],
-    ["暖男/女型", 3, "节日发过群祝福"],
-    ["养鱼型", 4, "这周内给他发了有用内容 / 资料"]
-  ]},
-  { id: "Q10", dim: "用户维护", title: "用户和你的日常互动是？", options: [
-    ["僵尸粉型", 1, "几乎零互动"],
-    ["心急型", 2, "偶尔点赞我的促销动态"],
-    ["暖男/女型", 3, "经常点赞评论，关系还不错"],
-    ["养鱼型", 4, "主动期待更新，会私信问问题"]
-  ]},
-  { id: "Q11", dim: "用户成交", title: "用户问完产品细节后说“我再考虑一下”，你的第一反应是？", options: [
-    ["被动型", 1, "好的，您慢慢考虑"],
-    ["压迫型", 2, "今天最后一天优惠，反复催"],
-    ["推销型", 3, "再次强调产品好处和性价比"],
-    ["催眠型", 4, "先问他主要纠结哪一点"]
-  ]},
-  { id: "Q12", dim: "用户成交", title: "卖一个 999 元的产品，你的成交话术大概是？", options: [
-    ["被动型", 1, "没有固定话术，对方问什么答什么"],
-    ["压迫型", 2, "限时优惠、错过没了、倒计时"],
-    ["推销型", 3, "产品有三大好处，性价比高"],
-    ["催眠型", 4, "用案例和故事让用户自己看到需求"]
-  ]},
-  { id: "Q13", dim: "用户成交", title: "用户犹豫“有点贵”时，你最常用的应对是？", options: [
-    ["被动型", 1, "那您再考虑"],
-    ["压迫型", 2, "今天真的最后一天"],
-    ["推销型", 3, "帮他算账，分摊到每天很便宜"],
-    ["催眠型", 4, "先确认是预算问题还是时机问题"]
-  ]},
-  { id: "Q14", dim: "用户成交", title: "当你成交了一单，你最常做的复盘是？", options: [
-    ["被动型", 1, "几乎不复盘"],
-    ["压迫型", 2, "看有没有给足紧迫感"],
-    ["推销型", 3, "看哪个卖点 / 价格打动他"],
-    ["催眠型", 4, "拆解购买动机和流失节点"]
-  ]},
-  { id: "Q15", dim: "用户成交", title: "你最相信下面哪句话？", options: [
-    ["被动型", 1, "缘分到了自然就成"],
-    ["压迫型", 2, "用户都是被推一把才动的"],
-    ["推销型", 3, "价值讲透，用户就会买"],
-    ["催眠型", 4, "用户买的是产品解决的问题"]
-  ]},
-  { id: "Q16", dim: "用户交付", title: "用户付款的那一刻，你给他发的第一条消息通常是？", options: [
-    ["放羊型", 1, "没发，等他自己来问"],
-    ["割韭菜型", 2, "感谢支持，然后就消失"],
-    ["打工型", 3, "感谢购买，稍后安排服务"],
-    ["惊喜型", 4, "欢迎仪式：感谢 + 下一步明细 + 小惊喜"]
-  ]},
-  { id: "Q17", dim: "用户交付", title: "服务开始前，你会怎么让用户清楚会得到什么？", options: [
-    ["放羊型", 1, "不会刻意对齐"],
-    ["割韭菜型", 2, "简单说一句包含 ABC"],
-    ["打工型", 3, "发服务清单 / 流程图"],
-    ["惊喜型", 4, "一对一确认时间、阶段成果和不包含项"]
-  ]},
-  { id: "Q18", dim: "用户交付", title: "服务过程中用户说效果没达到预期，你怎么处理？", options: [
-    ["放羊型", 1, "让他自己消化"],
-    ["割韭菜型", 2, "简单解释，能搪塞过去就好"],
-    ["打工型", 3, "认真听反馈，调整服务内容"],
-    ["惊喜型", 4, "共情，拆解 gap，并给补救方案"]
-  ]},
-  { id: "Q19", dim: "用户交付", title: "服务结束后的最后一次互动，通常是？", options: [
-    ["放羊型", 1, "服务一结束就各回各家"],
-    ["割韭菜型", 2, "感谢支持，再见"],
-    ["打工型", 3, "发反馈问卷"],
-    ["惊喜型", 4, "结案仪式，顺势铺垫下一阶段"]
-  ]},
-  { id: "Q20", dim: "用户交付", title: "用户反馈中，最让你紧张的是哪句话？", options: [
-    ["放羊型", 1, "你怎么从来不主动联系我"],
-    ["割韭菜型", 2, "你收钱前后态度不一样"],
-    ["打工型", 3, "没毛病，但没记忆点"],
-    ["惊喜型", 4, "你比我预期的还用心"]
-  ]},
-  { id: "Q21", dim: "用户裂变", title: "老用户买完一次后，你的设计里他下一步会做什么？", options: [
-    ["一锤子型", 1, "没设计，看他自己"],
-    ["随缘型", 2, "期待他自己再来买"],
-    ["利诱型", 3, "发优惠券 / 回访求他再来"],
-    ["共生型", 4, "有清晰产品阶梯，自然想买进阶款"]
-  ]},
-  { id: "Q22", dim: "用户裂变", title: "你对老用户会有专门的优惠方案吗？", options: [
-    ["一锤子型", 1, "买了就是买了，不分新老"],
-    ["随缘型", 2, "看关系，关系好的便宜点"],
-    ["利诱型", 3, "偶尔做折扣 / 返现活动"],
-    ["共生型", 4, "有明确新老客价格体系和增值方案"]
-  ]},
-  { id: "Q23", dim: "用户裂变", title: "上个月有几个老用户主动给你介绍了新客户？", options: [
-    ["一锤子型", 1, "一个都没有"],
-    ["随缘型", 2, "1-2 个，凭朋友帮忙"],
-    ["利诱型", 3, "5 个左右，因为有红包 / 礼品"],
-    ["共生型", 4, "10 个以上，老用户主动安利"]
-  ]},
-  { id: "Q24", dim: "用户裂变", title: "你的产品阶梯 / 客单价分布是？", options: [
-    ["一锤子型", 1, "只有一个产品 / 客单价"],
-    ["随缘型", 2, "有几个产品但没明确升单逻辑"],
-    ["利诱型", 3, "有阶梯，但靠优惠券推进"],
-    ["共生型", 4, "完整产品阶梯，自然进阶到高客单"]
-  ]},
-  { id: "Q25", dim: "用户裂变", title: "你对老用户的看法，更接近哪种？", options: [
-    ["一锤子型", 1, "老客户太磨人，不如开发新客"],
-    ["随缘型", 2, "老客户重要，但没时间维护"],
-    ["利诱型", 3, "会做专属动作或返现激励"],
-    ["共生型", 4, "老客户是核心资产"]
-  ]}
+  ["Q01", "用户获取", "你想给自己加 100 个新精准粉，第一反应是？", [["朋友圈吼一嗓子“求介绍”，等天上掉馅饼", "佛系型", 1], ["进十几个群拉人，能加多少加多少", "莽撞型", 2], ["设计个钩子，定向丢到目标群里", "钩子型", 3], ["写一篇戳痛点的内容，让人主动来加", "磁铁型", 4]]],
+  ["Q02", "用户获取", "你目前主要的引流方式是？", [["老客户介绍 / 朋友帮忙拉", "佛系型", 1], ["不停加人 / 进群拉人", "莽撞型", 2], ["几个固定的钩子和引流活动", "钩子型", 3], ["内容矩阵让人主动来", "磁铁型", 4]]],
+  ["Q03", "用户获取", "你的引流钩子长什么样？", [["没有固定钩子，临时想啥发啥", "佛系型", 1], ["进群送资料、加我送 XXX", "莽撞型", 2], ["针对特定问题的解决方案", "钩子型", 3], ["通过持续内容 / 人设吸引", "磁铁型", 4]]],
+  ["Q04", "用户获取", "看到同行 IP 涨粉很快，你通常会？", [["羡慕一下，觉得人家命好", "佛系型", 1], ["去评论区 / 粉丝群里加人", "莽撞型", 2], ["拆解他的钩子并设计一个", "钩子型", 3], ["研究人设和定位差异", "磁铁型", 4]]],
+  ["Q05", "用户获取", "如果有 1000 块预算专门用来涨粉，你会怎么花？", [["不舍得花，宁可自然涨", "佛系型", 1], ["全部砸到投流上", "莽撞型", 2], ["做引流活动和钩子物料", "钩子型", 3], ["投在内容创作上", "磁铁型", 4]]],
+  ["Q06", "用户维护", "新朋友刚加你微信、备注好了，你下一步会做什么？", [["先放着，等他自己找我", "僵尸粉型", 1], ["立刻甩产品介绍 / 价目表", "心急型", 2], ["简单聊几句，问问他做什么", "暖男/女型", 3], ["自我介绍 + 小礼物 + 选择题", "养鱼型", 4]]],
+  ["Q07", "用户维护", "你最近一周的朋友圈，主要内容是？", [["有空才发，没空就空着", "僵尸粉型", 1], ["几乎全是产品广告", "心急型", 2], ["一半生活一半干货", "暖男/女型", 3], ["每条都有定位，按节奏发", "养鱼型", 4]]],
+  ["Q08", "用户维护", "让你说出最赚钱的 10 个客户是谁，你会？", [["没想过这个问题", "僵尸粉型", 1], ["大概有印象，说不出共同点", "心急型", 2], ["能说出名字和大概特征", "暖男/女型", 3], ["能打开表格 / 笔记说清楚", "养鱼型", 4]]],
+  ["Q09", "用户维护", "你上一次主动联系老用户，不是为了卖东西，是什么时候？", [["想不起来了", "僵尸粉型", 1], ["上次卖东西时顺便聊了两句", "心急型", 2], ["节日发过群祝福", "暖男/女型", 3], ["这周内发了有用内容 / 资料", "养鱼型", 4]]],
+  ["Q10", "用户维护", "用户和你的日常互动是？", [["几乎零互动", "僵尸粉型", 1], ["偶尔点赞促销动态", "心急型", 2], ["经常点赞评论", "暖男/女型", 3], ["主动期待更新，会私信问问题", "养鱼型", 4]]],
+  ["Q11", "用户成交", "用户说“我再考虑一下”，你的第一反应是？", [["好的，您慢慢考虑", "被动型", 1], ["今天最后一天优惠，反复催", "压迫型", 2], ["再次强调产品好处和性价比", "推销型", 3], ["先问他主要纠结哪一点", "催眠型", 4]]],
+  ["Q12", "用户成交", "卖一个 999 元的产品，你的成交话术大概是？", [["没有固定话术，对方问什么答什么", "被动型", 1], ["限时优惠、错过没了", "压迫型", 2], ["产品有三大好处，性价比高", "推销型", 3], ["用案例和故事让用户看到需求", "催眠型", 4]]],
+  ["Q13", "用户成交", "用户犹豫“有点贵”时，你最常用的应对是？", [["那您再考虑", "被动型", 1], ["今天真的最后一天", "压迫型", 2], ["帮他算账，分摊到每天很便宜", "推销型", 3], ["确认是预算问题还是时机问题", "催眠型", 4]]],
+  ["Q14", "用户成交", "成交一单后，你最常做的复盘是？", [["几乎不复盘", "被动型", 1], ["看有没有给足紧迫感", "压迫型", 2], ["看哪个卖点 / 价格打动他", "推销型", 3], ["拆解购买动机和流失节点", "催眠型", 4]]],
+  ["Q15", "用户成交", "你最相信下面哪句话？", [["缘分到了自然就成", "被动型", 1], ["用户都是被推一把才动的", "压迫型", 2], ["价值讲透，用户就会买", "推销型", 3], ["用户买的是产品解决的问题", "催眠型", 4]]],
+  ["Q16", "用户交付", "用户付款那一刻，你发的第一条消息通常是？", [["没发，等他自己来问", "放羊型", 1], ["感谢支持，然后就消失", "割韭菜型", 2], ["感谢购买，稍后安排服务", "打工型", 3], ["感谢 + 下一步明细 + 小惊喜", "惊喜型", 4]]],
+  ["Q17", "用户交付", "服务开始前，你会怎么让用户清楚会得到什么？", [["不会刻意对齐", "放羊型", 1], ["简单说一句包含 ABC", "割韭菜型", 2], ["发服务清单 / 流程图", "打工型", 3], ["确认时间、阶段成果和不包含项", "惊喜型", 4]]],
+  ["Q18", "用户交付", "服务过程中用户说效果没达到预期，你怎么处理？", [["让他自己消化", "放羊型", 1], ["简单解释，能搪塞就好", "割韭菜型", 2], ["认真听反馈，调整服务内容", "打工型", 3], ["共情，拆 gap，并给补救方案", "惊喜型", 4]]],
+  ["Q19", "用户交付", "服务结束后的最后一次互动，通常是？", [["服务结束就各回各家", "放羊型", 1], ["感谢支持，再见", "割韭菜型", 2], ["发反馈问卷", "打工型", 3], ["结案仪式，铺垫下一阶段", "惊喜型", 4]]],
+  ["Q20", "用户交付", "用户反馈中，最让你紧张的是哪句话？", [["你怎么从来不主动联系我", "放羊型", 1], ["你收钱前后态度不一样", "割韭菜型", 2], ["没毛病，但没记忆点", "打工型", 3], ["你比我预期的还用心", "惊喜型", 4]]],
+  ["Q21", "用户裂变", "老用户买完一次后，你的设计里他下一步会做什么？", [["没设计，看他自己", "一锤子型", 1], ["期待他自己再来买", "随缘型", 2], ["发优惠券 / 回访求他再来", "利诱型", 3], ["有清晰产品阶梯，自然想买进阶款", "共生型", 4]]],
+  ["Q22", "用户裂变", "你对老用户会有专门的优惠方案吗？", [["买了就是买了，不分新老", "一锤子型", 1], ["看关系，关系好的便宜点", "随缘型", 2], ["偶尔做折扣 / 返现活动", "利诱型", 3], ["有明确新老客价格体系和增值方案", "共生型", 4]]],
+  ["Q23", "用户裂变", "上个月有几个老用户主动给你介绍了新客户？", [["一个都没有", "一锤子型", 1], ["1-2 个，凭朋友帮忙", "随缘型", 2], ["5 个左右，因为有红包 / 礼品", "利诱型", 3], ["10 个以上，老用户主动安利", "共生型", 4]]],
+  ["Q24", "用户裂变", "你的产品阶梯 / 客单价分布是？", [["只有一个产品 / 客单价", "一锤子型", 1], ["有几个产品但没明确升单逻辑", "随缘型", 2], ["有阶梯，但靠优惠券推进", "利诱型", 3], ["完整产品阶梯，自然进阶到高客单", "共生型", 4]]],
+  ["Q25", "用户裂变", "你对老用户的看法，更接近哪种？", [["老客户太磨人，不如开发新客", "一锤子型", 1], ["老客户重要，但没时间维护", "随缘型", 2], ["会做专属动作或返现激励", "利诱型", 3], ["老客户是核心资产", "共生型", 4]]]
+].map(([id, dimension, title, options]) => ({ id, dimension, title, options: options.map(([text, type, score]) => ({ text, type, score })) }));
+
+const overallLevels = [
+  ["0-44", "待破局", "动作散、链路短，当前更需要先补一套最小可执行闭环。"],
+  ["45-64", "可用", "已经有部分动作能跑起来，但稳定性和复用度不足。"],
+  ["65-84", "进阶", "商业动作较完整，可以开始做分层运营和自动化提效。"],
+  ["85-100", "成熟", "已有比较稳定的方法论，重点是放大和复制。"]
 ];
 
-let activeDim = "全部";
-let selectedQuestionId = "Q01";
+const dimensionLevels = [
+  ["5-8", "薄弱", "这一维主要靠临场发挥，需要先补基础动作。"],
+  ["9-12", "可用", "能做，但不稳定，建议先沉淀成固定流程。"],
+  ["13-16", "优势", "已经形成有效动作，可作为当前经营抓手。"],
+  ["17-20", "强项", "这一维表现稳定，适合进一步放大和标准化。"]
+];
 
-function qs(selector) {
+let activeView = "templates";
+let activeInspectorTab = "question";
+let selectedQuestionIndex = 0;
+let templateInserted = true;
+
+function $(selector) {
   return document.querySelector(selector);
 }
 
-function qsa(selector) {
+function $all(selector) {
   return Array.from(document.querySelectorAll(selector));
 }
 
-function switchSection(section) {
-  qsa(".section").forEach(el => el.classList.toggle("active", el.id === `section-${section}`));
-  qsa(".nav-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.section === section));
-}
-
-function renderDimensions() {
-  qs("#dimensionRows").innerHTML = dimensions.map(dim => `
-    <tr>
-      <td>
-        <div class="dim-name">${dim.key}</div>
-        <div class="muted">${dim.full}</div>
-      </td>
-      <td>5 题</td>
-      <td><span class="score-range">25 - 100</span><div class="muted">原始分 5 - 20</div></td>
-      <td><div class="priority-list">${dim.priority.map(item => `<span>${item}</span>`).join("")}</div></td>
-      <td>${dim.cta}</td>
-    </tr>
-  `).join("");
-}
-
-function renderDimensionTabs() {
-  const tabs = ["全部", ...dimensions.map(dim => dim.key)];
-  qs("#dimensionTabs").innerHTML = tabs.map(name => `
-    <button class="dim-tab${activeDim === name ? " active" : ""}" data-dim="${name}">${name}</button>
-  `).join("");
-}
-
-function renderQuestions() {
-  const keyword = qs("#questionSearch").value.trim();
-  const rows = questions.filter(q => {
-    const matchDim = activeDim === "全部" || q.dim === activeDim;
-    const matchKeyword = !keyword || q.title.includes(keyword) || q.id.includes(keyword);
-    return matchDim && matchKeyword;
-  });
-  qs("#questionRows").innerHTML = rows.map(q => `
-    <tr class="${selectedQuestionId === q.id ? "selected" : ""}" data-question="${q.id}">
-      <td><strong>${q.id}</strong></td>
-      <td>${q.dim}</td>
-      <td><div class="question-title">${q.title}</div></td>
-      <td>
-        <div class="option-mini">
-          ${q.options.map(opt => `<span>${opt[0]}：${opt[1]} 分</span>`).join("")}
-        </div>
-      </td>
-      <td><span class="tag green">已配置</span></td>
-    </tr>
-  `).join("");
-  qs("#summaryQuestions").textContent = questions.length;
-}
-
-function renderInspector() {
-  const q = questions.find(item => item.id === selectedQuestionId) || questions[0];
-  qs("#questionInspector").innerHTML = `
-    <div class="selected-question">${q.id} ${q.title}</div>
-    <div class="inline-list" style="margin-bottom: 12px;">
-      <span class="tag blue">${q.dim}</span>
-      <span class="tag orange">单选题</span>
-    </div>
-    ${q.options.map((opt, idx) => `
-      <div class="option-card">
-        <div class="meta"><span>选项 ${idx + 1}</span><span>${opt[0]} / ${opt[1]} 分</span></div>
-        <div class="copy">${opt[2]}</div>
-      </div>
-    `).join("")}
-  `;
-}
-
 function showToast(text) {
-  const toast = qs("#toast");
+  const toast = $("#toast");
   toast.textContent = text;
   toast.classList.add("show");
   window.clearTimeout(showToast.timer);
   showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1800);
 }
 
-qsa(".nav-btn").forEach(btn => {
-  btn.addEventListener("click", () => switchSection(btn.dataset.section));
-});
+function switchView(view) {
+  activeView = view;
+  $all(".view").forEach(el => el.classList.toggle("active", el.id === `view-${view}`));
+  $all(".nav-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.view === view));
+  const copy = {
+    templates: ["测评模板资产", "先把测评题目、维度、分型和结果页配置成模板，再给普通问卷引用。"],
+    "template-editor": ["创建测评问卷模板", "左侧添加题目，中间预览，右侧配置每道题、维度分型和结果页规则。"],
+    "form-editor": ["普通问卷引用模板", "普通问卷里选择已创建模板，作为整组模块插入、删除和发布。"]
+  };
+  $("#pageTitle").textContent = copy[view][0];
+  $("#pageSubtitle").textContent = copy[view][1];
+}
 
-qsa("[data-toast]").forEach(btn => {
-  btn.addEventListener("click", () => showToast(btn.dataset.toast));
-});
+function switchInspector(tab) {
+  activeInspectorTab = tab;
+  $all(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.inspectorTab === tab));
+  $all(".inspector-section").forEach(el => el.classList.toggle("active", el.id === `inspector-${tab}`));
+}
 
-qs("#questionSearch").addEventListener("input", renderQuestions);
+function renderTemplatePreview() {
+  $("#assetDimCount").textContent = dimensions.length;
+  $("#assetQuestionCount").textContent = questions.length;
+  $("#editorDimCount").textContent = dimensions.length;
+  $("#editorQuestionCount").textContent = questions.length;
+  $("#templateQuestionPreview").innerHTML = questions.slice(0, 7).map((q, index) => `
+    <button class="question-chip ${selectedQuestionIndex === index ? "active" : ""}" data-question-index="${index}">
+      <div class="top"><span>${q.id} / ${q.dimension}</span><span>单选测评题</span></div>
+      <strong>${q.title}</strong>
+      <div class="option-preview">
+        ${q.options.slice(0, 2).map(option => `<div class="option-row"><span>${option.text}</span><span>${option.type} / ${option.score}分</span></div>`).join("")}
+      </div>
+    </button>
+  `).join("") + `<div class="more-line">其余 ${questions.length - 7} 题继续按维度排列，可逐题编辑</div>`;
+}
+
+function renderQuestionInspector() {
+  const q = questions[selectedQuestionIndex];
+  const dimensionOptions = dimensions.map(dim => `<option ${dim.name === q.dimension ? "selected" : ""}>${dim.name}</option>`).join("");
+  const currentDimension = dimensions.find(dim => dim.name === q.dimension) || dimensions[0];
+  $("#inspector-question").innerHTML = `
+    <div class="config-block">
+      <h4>题目</h4>
+      <div class="form-grid">
+        <div class="field">
+          <label>题目类型</label>
+          <select><option>单选测评题</option></select>
+        </div>
+        <div class="field">
+          <label>所属维度</label>
+          <select>${dimensionOptions}</select>
+        </div>
+        <div class="field span-2">
+          <label>题目标题</label>
+          <textarea>${q.title}</textarea>
+        </div>
+      </div>
+    </div>
+    <div class="config-block">
+      <h4>选项 <button class="btn small" data-toast="已模拟添加选项">添加选项</button></h4>
+      <div class="compact-list">
+        ${q.options.map((option, index) => `
+          <div class="compact-item">
+            <div class="meta"><span>选项 ${index + 1}</span><span>${q.dimension}</span></div>
+            <div class="form-grid">
+              <div class="field span-2">
+                <label>选项文案</label>
+                <input value="${option.text}">
+              </div>
+              <div class="field">
+                <label>分值</label>
+                <select>${[1,2,3,4].map(score => `<option ${score === option.score ? "selected" : ""}>${score} 分</option>`).join("")}</select>
+              </div>
+              <div class="field">
+                <label>测评类型</label>
+                <select>${currentDimension.types.map(type => `<option ${type === option.type ? "selected" : ""}>${type}</option>`).join("")}</select>
+              </div>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderDimensionInspector() {
+  $("#inspector-dimension").innerHTML = `
+    <div class="config-block">
+      <h4>维度 <button class="btn small" data-toast="已模拟新增维度">添加维度</button></h4>
+      <div class="compact-list">
+        ${dimensions.map(dim => `
+          <div class="compact-item">
+            <div class="meta"><span>${dim.subtitle}</span><span>${questions.filter(q => q.dimension === dim.name).length} 题</span></div>
+            <strong>${dim.name}</strong>
+            <p class="muted">${dim.types.join(" / ")}</p>
+            <div class="divider"></div>
+            <p class="muted">平票优先级：${dim.types.join(" > ")}</p>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+    <div class="config-block">
+      <h4>规则说明</h4>
+      <div class="notice">每道题只归属一个维度。提交后按维度累加分数，类型取该维度内出现次数最多的选项类型；如果平票，按上方优先级兜底。</div>
+    </div>
+  `;
+}
+
+function renderResultInspector() {
+  const typeCards = dimensions.flatMap(dim => dim.types.slice(0, 2).map(type => ({ dim, type }))).slice(0, 8);
+  $("#inspector-result").innerHTML = `
+    <div class="config-block">
+      <h4>结果页基础</h4>
+      <div class="form-grid">
+        <div class="field span-2">
+          <label>结果页标题</label>
+          <input value="多维测评综合结果">
+        </div>
+        <div class="field">
+          <label>优势展示数量</label>
+          <select><option>2 个</option><option>3 个</option></select>
+        </div>
+        <div class="field">
+          <label>劣势展示数量</label>
+          <select><option>2 个</option><option>3 个</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="config-block">
+      <h4>综合分层说明</h4>
+      ${overallLevels.map(level => `<div class="level-row"><b>${level[0]}<br>${level[1]}</b><p>${level[2]}</p></div>`).join("")}
+    </div>
+    <div class="config-block">
+      <h4>单维分层说明</h4>
+      ${dimensionLevels.map(level => `<div class="level-row"><b>${level[0]}<br>${level[1]}</b><p>${level[2]}</p></div>`).join("")}
+    </div>
+    <div class="config-block">
+      <h4>类型反馈说明</h4>
+      <div class="type-grid">
+        ${typeCards.map(({ dim, type }) => `
+          <div class="type-card">
+            <div class="head"><strong>${dim.name}：${type}</strong><span class="tag blue">可编辑</span></div>
+            <p>用于结果页“当前类型”解释。建议文案：${dim.advice}</p>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderQuestionnaireReference() {
+  const slot = $("#templateGroupSlot");
+  if (!templateInserted) {
+    slot.innerHTML = `<div class="empty-state">还没有插入测评模板。点击左侧“添加多维测评模板”选择一个模板。</div>`;
+  } else {
+    slot.innerHTML = `
+      <div class="template-group">
+        <div class="template-group-head">
+          <div>
+            <h4>小 IP 商业力测评</h4>
+            <p>来自测评模板库，整组 ${questions.length} 题 / ${dimensions.length} 维。</p>
+          </div>
+          <span class="tag blue">整组引用</span>
+        </div>
+        <div class="compact-list">
+          ${dimensions.map(dim => `<div class="compact-item"><div class="meta"><span>${dim.name}</span><span>${questions.filter(q => q.dimension === dim.name).length} 题</span></div><strong>${dim.subtitle}</strong></div>`).join("")}
+        </div>
+        <div class="group-actions">
+          <button class="btn small" data-view="template-editor">打开模板</button>
+          <button class="btn small" data-remove-template>删除整组</button>
+        </div>
+      </div>
+    `;
+  }
+
+  $("#referenceInspector").innerHTML = templateInserted ? `
+    <div class="config-block">
+      <h4>已引用模板</h4>
+      <div class="compact-item">
+        <div class="meta"><span>模板名称</span><span>可更新</span></div>
+        <strong>小 IP 商业力测评</strong>
+        <p class="muted">${dimensions.length} 个维度、${questions.length} 题、含结果页规则。</p>
+      </div>
+      <div class="notice">这组题来自同一个模板，当前问卷里不逐题拆散管理。需要修改题目和结果页时，回到模板编辑页。</div>
+      <div class="divider"></div>
+      <button class="btn full" data-remove-template>删除整组模板</button>
+    </div>
+    <div class="config-block">
+      <h4>仍然复用的普通问卷能力</h4>
+      <div class="compact-list">
+        <div class="compact-item">手机号、城市、来源渠道等基础字段</div>
+        <div class="compact-item">提交后打标签、webhook 推送</div>
+        <div class="compact-item">问卷状态、分享链接、提交记录</div>
+      </div>
+    </div>
+  ` : `
+    <div class="config-block">
+      <h4>选择测评模板</h4>
+      <div class="compact-item">
+        <div class="meta"><span>可引用</span><span>${questions.length} 题</span></div>
+        <strong>小 IP 商业力测评</strong>
+        <p class="muted">${dimensions.map(dim => dim.name).join(" / ")}</p>
+      </div>
+      <div class="divider"></div>
+      <button class="btn primary full" data-insert-template>选择并插入模板</button>
+    </div>
+  `;
+}
 
 document.addEventListener("click", event => {
-  const dimTab = event.target.closest(".dim-tab");
-  if (dimTab) {
-    activeDim = dimTab.dataset.dim;
-    renderDimensionTabs();
-    renderQuestions();
+  const viewBtn = event.target.closest("[data-view]");
+  if (viewBtn) {
+    switchView(viewBtn.dataset.view);
   }
 
-  const questionRow = event.target.closest("[data-question]");
-  if (questionRow) {
-    selectedQuestionId = questionRow.dataset.question;
-    renderQuestions();
-    renderInspector();
+  const toastBtn = event.target.closest("[data-toast]");
+  if (toastBtn) {
+    showToast(toastBtn.dataset.toast);
+  }
+
+  const tabBtn = event.target.closest("[data-inspector-tab]");
+  if (tabBtn) {
+    switchInspector(tabBtn.dataset.inspectorTab);
+  }
+
+  const questionBtn = event.target.closest("[data-question-index]");
+  if (questionBtn) {
+    selectedQuestionIndex = Number(questionBtn.dataset.questionIndex);
+    renderTemplatePreview();
+    renderQuestionInspector();
+    switchInspector("question");
+  }
+
+  if (event.target.closest("[data-insert-template]")) {
+    templateInserted = true;
+    renderQuestionnaireReference();
+    switchView("form-editor");
+    showToast("已把“小 IP 商业力测评”作为整组模板插入当前问卷");
+  }
+
+  if (event.target.closest("[data-remove-template]")) {
+    templateInserted = false;
+    renderQuestionnaireReference();
+    showToast("已模拟删除整组测评模板");
   }
 });
 
-renderDimensions();
-renderDimensionTabs();
-renderQuestions();
-renderInspector();
+renderTemplatePreview();
+renderQuestionInspector();
+renderDimensionInspector();
+renderResultInspector();
+renderQuestionnaireReference();
 </script>
 </body>
 </html>
